@@ -382,155 +382,116 @@ function updateProductCount() {
 
 // ===================================
 // PDF CATALOG GENERATION WITH ARABIC SUPPORT
+// Using HTML2Canvas for proper Arabic rendering
 // ===================================
 async function downloadCatalogPDF() {
     try {
-        showToast('جاري إنشاء الكتالوج...', 'info');
+        showToast('جاري إنشاء الكتالوج... هذا قد يستغرق دقيقة', 'info');
 
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF('p', 'mm', 'a4');
+        // Create a temporary container for PDF content
+        const pdfContainer = document.createElement('div');
+        pdfContainer.style.cssText = `
+            position: absolute;
+            left: -9999px;
+            width: 800px;
+            background: white;
+            padding: 40px;
+            font-family: 'Cairo', sans-serif;
+            direction: rtl;
+        `;
 
-        // Add Arabic font support if available
-        if (typeof doc.addFont === 'function' && window.jsPDFArabic) {
-            doc.addFont('Amiri-Regular.ttf', 'Amiri', 'normal');
-            doc.setFont('Amiri');
-        }
+        // Build HTML content with proper Arabic fonts
+        let htmlContent = `
+            <div style="text-align: center; margin-bottom: 30px;">
+                <h1 style="color: #D4AF37; font-size: 32px; margin: 0;">عطور أبو عمار</h1>
+                <h2 style="color: #666; font-size: 24px; margin: 10px 0;">ABO AMMAR PERFUMES</h2>
+                <div style="background: #D4AF37; padding: 20px; margin: 20px 0; border-radius: 8px;">
+                    <h3 style="margin: 5px 0; color: #000;">معلومات التواصل - Contact Information</h3>
+                    <p style="margin: 5px 0; color: #000; font-size: 16px;"><strong>WhatsApp:</strong> +20 103 263 7495</p>
+                    <p style="margin: 5px 0; color: #000;">متاح على مدار الساعة - Available 24/7</p>
+                    <p style="margin: 5px 0; color: #000;">جميع المنتجات أصلية 100% - All Products 100% Original</p>
+                </div>
+                <p style="color: #666; margin: 10px 0;">
+                    التاريخ: ${new Date().toLocaleDateString('ar-EG')} |
+                    عدد المنتجات: ${filteredProducts.length}
+                </p>
+            </div>
+            <table style="width: 100%; border-collapse: collapse; font-size: 12px;">
+                <thead>
+                    <tr style="background: #f0f0f0;">
+                        <th style="border: 1px solid #ddd; padding: 8px; text-align: right;">الكود</th>
+                        <th style="border: 1px solid #ddd; padding: 8px; text-align: right;">الشركة</th>
+                        <th style="border: 1px solid #ddd; padding: 8px; text-align: right;">الاسم بالعربي</th>
+                        <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">English Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+        `;
 
-        let yPos = 20;
-        const pageHeight = doc.internal.pageSize.height;
-        const pageWidth = doc.internal.pageSize.width;
-        const margin = 15;
-        const lineHeight = 7;
-
-        // Title
-        doc.setFontSize(20);
-        doc.setTextColor(212, 175, 55);
-        doc.text('ABO AMMAR PERFUMES', pageWidth / 2, yPos, { align: 'center' });
-        yPos += 10;
-
-        // Subtitle
-        doc.setFontSize(14);
-        doc.setTextColor(100);
-        doc.text('Product Catalog - كتالوج المنتجات', pageWidth / 2, yPos, { align: 'center' });
-        yPos += 10;
-
-        // Contact Info Box
-        doc.setFillColor(212, 175, 55);
-        doc.rect(margin, yPos, pageWidth - (margin * 2), 25, 'F');
-
-        doc.setFontSize(10);
-        doc.setTextColor(0, 0, 0);
-        yPos += 7;
-        doc.text('Contact Information - معلومات التواصل', pageWidth / 2, yPos, { align: 'center' });
-        yPos += 6;
-        doc.text('WhatsApp: +20 103 263 7495', pageWidth / 2, yPos, { align: 'center' });
-        yPos += 5;
-        doc.text('Available 24/7 - متاح على مدار الساعة', pageWidth / 2, yPos, { align: 'center' });
-        yPos += 5;
-        doc.text('100% Original Products - منتجات أصلية', pageWidth / 2, yPos, { align: 'center' });
-        yPos += 12;
-
-        // Date and count
-        doc.setTextColor(100);
-        doc.setFontSize(9);
-        doc.text(`Date: ${new Date().toLocaleDateString('en-US')}`, margin, yPos);
-        doc.text(`Total: ${filteredProducts.length} products`, pageWidth - margin, yPos, { align: 'right' });
-        yPos += 10;
-
-        // Table header
-        doc.setFillColor(240, 240, 240);
-        doc.rect(margin, yPos - 5, pageWidth - (margin * 2), 8, 'F');
-
-        doc.setFontSize(9);
-        doc.setTextColor(0);
-        doc.setFont('helvetica', 'bold');
-
-        const col1 = margin + 5;
-        const col2 = margin + 35;
-        const col3 = margin + 60;
-        const col4 = margin + 120;
-
-        doc.text('Code', col1, yPos);
-        doc.text('Company', col2, yPos);
-        doc.text('English Name', col3, yPos);
-        doc.text('Arabic', col4, yPos);
-
-        yPos += 8;
-        doc.setFont('helvetica', 'normal');
-
-        // Products
         filteredProducts.forEach((product, index) => {
-            // Check if we need a new page
-            if (yPos > pageHeight - 30) {
-                doc.addPage();
-                yPos = 20;
-
-                // Repeat header on new page
-                doc.setFillColor(240, 240, 240);
-                doc.rect(margin, yPos - 5, pageWidth - (margin * 2), 8, 'F');
-                doc.setFont('helvetica', 'bold');
-                doc.text('Code', col1, yPos);
-                doc.text('Company', col2, yPos);
-                doc.text('English Name', col3, yPos);
-                doc.text('Arabic', col4, yPos);
-                yPos += 8;
-                doc.setFont('helvetica', 'normal');
-            }
-
-            // Alternating row colors
-            if (index % 2 === 0) {
-                doc.setFillColor(250, 250, 250);
-                doc.rect(margin, yPos - 5, pageWidth - (margin * 2), lineHeight, 'F');
-            }
-
-            doc.setFontSize(8);
-            doc.setTextColor(0);
-
-            // Truncate long names if needed
-            const maxWidth = 55;
-            let nameEn = product.nameEn;
-            if (doc.getTextWidth(nameEn) > maxWidth) {
-                while (doc.getTextWidth(nameEn + '...') > maxWidth && nameEn.length > 3) {
-                    nameEn = nameEn.substring(0, nameEn.length - 1);
-                }
-                nameEn += '...';
-            }
-
-            doc.text(product.code, col1, yPos);
-            doc.text(product.company.toUpperCase(), col2, yPos);
-            doc.text(nameEn, col3, yPos);
-            // Arabic name (will show as boxes in PDF, but at least structure is there)
-            doc.text(product.nameAr.substring(0, 30), col4, yPos);
-
-            yPos += lineHeight;
+            const bgColor = index % 2 === 0 ? '#fafafa' : 'white';
+            htmlContent += `
+                <tr style="background: ${bgColor};">
+                    <td style="border: 1px solid #ddd; padding: 6px; text-align: right;">${product.code}</td>
+                    <td style="border: 1px solid #ddd; padding: 6px; text-align: right;">${product.company.toUpperCase()}</td>
+                    <td style="border: 1px solid #ddd; padding: 6px; text-align: right;">${product.nameAr}</td>
+                    <td style="border: 1px solid #ddd; padding: 6px; text-align: left; direction: ltr;">${product.nameEn}</td>
+                </tr>
+            `;
         });
 
-        // Footer on last page
-        const totalPages = doc.internal.getNumberOfPages();
-        for (let i = 1; i <= totalPages; i++) {
-            doc.setPage(i);
-            doc.setFontSize(8);
-            doc.setTextColor(150);
-            doc.text(
-                `Page ${i} of ${totalPages}`,
-                pageWidth / 2,
-                pageHeight - 10,
-                { align: 'center' }
-            );
-            doc.text(
-                'ABO AMMAR PERFUMES',
-                pageWidth / 2,
-                pageHeight - 5,
-                { align: 'center' }
-            );
+        htmlContent += `
+                </tbody>
+            </table>
+            <div style="text-align: center; margin-top: 30px; color: #666;">
+                <p>ABO AMMAR PERFUMES - عطور أبو عمار</p>
+                <p>WhatsApp: +20 103 263 7495</p>
+            </div>
+        `;
+
+        pdfContainer.innerHTML = htmlContent;
+        document.body.appendChild(pdfContainer);
+
+        // Use html2canvas to render the content
+        const canvas = await html2canvas(pdfContainer, {
+            scale: 2,
+            useCORS: true,
+            logging: false,
+            backgroundColor: '#ffffff'
+        });
+
+        // Remove temporary container
+        document.body.removeChild(pdfContainer);
+
+        // Create PDF from canvas
+        const { jsPDF } = window.jspdf;
+        const imgData = canvas.toDataURL('image/png');
+
+        const imgWidth = 210; // A4 width in mm
+        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+        const pageHeight = 297; // A4 height in mm
+
+        const doc = new jsPDF('p', 'mm', 'a4');
+        let heightLeft = imgHeight;
+        let position = 0;
+
+        // Add image to PDF, splitting into pages if needed
+        doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+
+        while (heightLeft > 0) {
+            position = heightLeft - imgHeight;
+            doc.addPage();
+            doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+            heightLeft -= pageHeight;
         }
 
-        // Save
+        // Save PDF
         const filename = `AboAmmar_Catalog_${new Date().getTime()}.pdf`;
         doc.save(filename);
 
         showToast('تم تحميل الكتالوج بنجاح ✓', 'success');
-        console.log(`📄 PDF Downloaded: ${filteredProducts.length} products`);
+        console.log(`📄 PDF Downloaded: ${filteredProducts.length} products with Arabic support`);
 
     } catch (error) {
         console.error('❌ Error generating PDF:', error);

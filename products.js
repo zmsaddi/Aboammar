@@ -18,8 +18,8 @@ const productsData = [
   {
     "code": "MMK 75/8639",
     "company": "GM",
-    "nameAr": "اراميس 900 مركز (New) ARAMIS 900",
-    "nameEn": "اراميس 900 مركز (New) ARAMIS 900"
+    "nameAr": "اراميس 900 مركز (New)",
+    "nameEn": "(New) ARAMIS 900"
   },
   {
     "code": "36.130405",

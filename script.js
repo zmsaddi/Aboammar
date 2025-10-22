@@ -181,6 +181,17 @@ function displayProducts() {
 }
 
 // ===================================
+// UNIVERSAL WHATSAPP LINK HELPER
+// ===================================
+
+function getUniversalWhatsAppLink(phone, message) {
+    // Use wa.me for universal compatibility (works on all platforms)
+    // This works with: WhatsApp Personal, WhatsApp Business, Desktop, Web
+    const encodedMessage = encodeURIComponent(message);
+    return `https://wa.me/${phone}?text=${encodedMessage}`;
+}
+
+// ===================================
 // CREATE PRODUCT CARD
 // ===================================
 
@@ -188,16 +199,15 @@ function createProductCard(product) {
     const card = document.createElement('div');
     card.className = 'product-card';
 
-    const whatsappMessage = encodeURIComponent(
+    const whatsappMessage =
         `مرحباً، أنا مهتم بالمنتج:\n` +
         `الاسم بالعربي: ${product.nameAr}\n` +
         `English Name: ${product.nameEn}\n` +
         `الكود: ${product.code}\n` +
         `الشركة: ${product.company.toUpperCase()}\n\n` +
-        `الموقع: https://aboammar.vercel.app`
-    );
+        `الموقع: https://aboammar.vercel.app`;
 
-    const whatsappLink = `https://api.whatsapp.com/send?phone=201032637495&text=${whatsappMessage}`;
+    const whatsappLink = getUniversalWhatsAppLink('201032637495', whatsappMessage);
 
     card.innerHTML = `
         <div class="product-header">

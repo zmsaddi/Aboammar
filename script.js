@@ -149,37 +149,59 @@ function setupEventListeners() {
     // Mobile menu toggle
     const menuToggle = document.querySelector('.menu-toggle');
     const nav = document.querySelector('.nav');
+    const mobileOverlay = document.getElementById('mobile-overlay');
 
-    if (menuToggle && nav) {
+    if (menuToggle && nav && mobileOverlay) {
+        // Toggle menu function
+        const toggleMenu = (show) => {
+            if (show) {
+                nav.classList.add('active');
+                menuToggle.classList.add('active');
+                mobileOverlay.classList.add('active');
+                menuToggle.innerHTML = '✕';
+                document.body.style.overflow = 'hidden'; // Prevent scrolling
+            } else {
+                nav.classList.remove('active');
+                menuToggle.classList.remove('active');
+                mobileOverlay.classList.remove('active');
+                menuToggle.innerHTML = '☰';
+                document.body.style.overflow = ''; // Restore scrolling
+            }
+        };
+
+        // Menu toggle button click
         menuToggle.addEventListener('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
-            nav.classList.toggle('active');
-            menuToggle.classList.toggle('active');
-
-            // Toggle icon
-            if (nav.classList.contains('active')) {
-                menuToggle.innerHTML = '✕';
-            } else {
-                menuToggle.innerHTML = '☰';
-            }
+            const isActive = nav.classList.contains('active');
+            toggleMenu(!isActive);
         });
 
         // Close menu when clicking nav links
         document.querySelectorAll('.nav-link').forEach(link => {
             link.addEventListener('click', () => {
-                nav.classList.remove('active');
-                menuToggle.classList.remove('active');
-                menuToggle.innerHTML = '☰';
+                toggleMenu(false);
             });
         });
 
-        // Close menu when clicking outside
+        // Close menu when clicking overlay
+        mobileOverlay.addEventListener('click', () => {
+            toggleMenu(false);
+        });
+
+        // Close menu when clicking outside (for good measure)
         document.addEventListener('click', (e) => {
-            if (!nav.contains(e.target) && !menuToggle.contains(e.target)) {
-                nav.classList.remove('active');
-                menuToggle.classList.remove('active');
-                menuToggle.innerHTML = '☰';
+            if (nav.classList.contains('active') &&
+                !nav.contains(e.target) &&
+                !menuToggle.contains(e.target)) {
+                toggleMenu(false);
+            }
+        });
+
+        // Close menu on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && nav.classList.contains('active')) {
+                toggleMenu(false);
             }
         });
     }

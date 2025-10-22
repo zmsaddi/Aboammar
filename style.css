@@ -183,6 +183,24 @@ body {
     font-size: 1.5rem;
     cursor: pointer;
     padding: 0.5rem;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+}
+
+/* Mobile Menu Overlay */
+.mobile-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 997;
+    opacity: 0;
+    transition: opacity var(--transition-normal);
+}
+
+.mobile-overlay.active {
+    display: block;
+    opacity: 1;
 }
 
 /* ===================================
@@ -928,27 +946,42 @@ body {
         right: 0;
         background: rgba(10, 10, 10, 0.98);
         backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
         flex-direction: column;
         padding: var(--spacing-lg);
         border-bottom: 1px solid rgba(212, 175, 55, 0.2);
         transform: translateY(-100%);
         opacity: 0;
+        visibility: hidden;
         transition: all var(--transition-normal);
         gap: 0;
+        z-index: 998;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
     }
 
     .nav.active {
         transform: translateY(0);
         opacity: 1;
+        visibility: visible;
     }
 
     .nav-link {
         padding: var(--spacing-md);
         border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+        width: 100%;
+        display: block;
     }
 
     .menu-toggle {
         display: block;
+        z-index: 1001;
+        position: relative;
+        font-size: 1.5rem;
+        transition: all var(--transition-fast);
+    }
+
+    .menu-toggle.active {
+        transform: rotate(90deg);
     }
 
     .products-grid {

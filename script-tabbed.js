@@ -278,7 +278,7 @@ async function downloadCatalogPDF() {
             product.nameAr
         ]);
 
-        // Create table with improved styling for better readability
+        // Create table with FULL Arabic support for all columns
         doc.autoTable({
             startY: 45,
             head: [['الكود', 'الشركة', 'English Name', 'الاسم بالعربي']],
@@ -288,40 +288,60 @@ async function downloadCatalogPDF() {
                 textColor: [0, 0, 0],
                 fontSize: 10,
                 fontStyle: 'bold',
-                halign: 'center'
+                halign: 'center',
+                font: fontAdded ? 'Amiri' : 'helvetica'  // Arabic font for headers
             },
             bodyStyles: {
-                textColor: [20, 20, 20],  // Darker text (almost black) for better readability
+                textColor: [0, 0, 0],  // Pure black for all text
                 fontSize: 9,
-                cellPadding: 3
+                cellPadding: 3,
+                font: fontAdded ? 'Amiri' : 'helvetica'  // Arabic font for all body text
             },
             alternateRowStyles: {
                 fillColor: [245, 245, 245]
             },
             columnStyles: {
-                0: { cellWidth: 25, halign: 'center' },
-                1: { cellWidth: 25, halign: 'center' },
-                2: { cellWidth: 60, halign: 'left' },
+                0: {
+                    cellWidth: 25,
+                    halign: 'center',
+                    textColor: [0, 0, 0]
+                },
+                1: {
+                    cellWidth: 25,
+                    halign: 'center',
+                    font: fontAdded ? 'Amiri' : 'helvetica',  // Arabic font for company names
+                    textColor: [0, 0, 0]
+                },
+                2: {
+                    cellWidth: 60,
+                    halign: 'center',
+                    font: fontAdded ? 'Amiri' : 'helvetica',  // Arabic font for English names (may contain Arabic)
+                    textColor: [0, 0, 0]
+                },
                 3: {
                     cellWidth: 60,
                     halign: 'right',
-                    font: fontAdded ? 'Amiri' : 'helvetica',
+                    font: fontAdded ? 'Amiri' : 'helvetica',  // Arabic font for Arabic names
                     fontSize: 9,
-                    textColor: [0, 0, 0]  // Pure black for Arabic text for maximum contrast
+                    textColor: [0, 0, 0]
                 }
             },
             margin: { top: 45, right: 15, bottom: 20, left: 15 },
             theme: 'grid',
             styles: {
                 lineColor: [200, 200, 200],
-                lineWidth: 0.1
+                lineWidth: 0.1,
+                font: fontAdded ? 'Amiri' : 'helvetica'  // Default Arabic font
             }
         });
 
-        // Footer on each page
+        // Footer on each page with Arabic font support
         const pageCount = doc.internal.getNumberOfPages();
         for (let i = 1; i <= pageCount; i++) {
             doc.setPage(i);
+            if (fontAdded) {
+                doc.setFont('Amiri');
+            }
             doc.setFontSize(9);
             doc.setTextColor(100, 100, 100);
             doc.text(

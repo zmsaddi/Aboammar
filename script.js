@@ -403,129 +403,69 @@ function updateProductCount() {
 }
 
 // ===================================
-// PDF CATALOG GENERATION WITH ARABIC SUPPORT
-// Using HTML2Canvas for proper Arabic rendering
+// CATALOG DOWNLOAD - CSV WITH PERFECT ARABIC
 // ===================================
 async function downloadCatalogPDF() {
     try {
-        showToast('جاري إنشاء الكتالوج... هذا قد يستغرق دقيقة', 'info');
+        showToast('جاري إنشاء الكتالوج...', 'info');
 
-        // Create a temporary container for PDF content
-        const pdfContainer = document.createElement('div');
-        pdfContainer.style.cssText = `
-            position: absolute;
-            left: -9999px;
-            width: 800px;
-            background: white;
-            padding: 40px;
-            font-family: 'Cairo', sans-serif;
-            direction: rtl;
-        `;
+        // Create CSV content with UTF-8 BOM for perfect Arabic in Excel
+        let csvContent = '\uFEFF'; // UTF-8 BOM
 
-        // Build HTML content with proper Arabic fonts
-        let htmlContent = `
-            <div style="text-align: center; margin-bottom: 30px;">
-                <h1 style="color: #D4AF37; font-size: 32px; margin: 0;">عطور أبو عمار</h1>
-                <h2 style="color: #666; font-size: 24px; margin: 10px 0;">ABO AMMAR PERFUMES</h2>
-                <div style="background: #D4AF37; padding: 20px; margin: 20px 0; border-radius: 8px;">
-                    <h3 style="margin: 5px 0; color: #000;">معلومات التواصل - Contact Information</h3>
-                    <p style="margin: 5px 0; color: #000; font-size: 16px;"><strong>WhatsApp:</strong> +20 103 263 7495</p>
-                    <p style="margin: 5px 0; color: #000;">متاح على مدار الساعة - Available 24/7</p>
-                    <p style="margin: 5px 0; color: #000;">جميع المنتجات أصلية 100% - All Products 100% Original</p>
-                </div>
-                <p style="color: #666; margin: 10px 0;">
-                    التاريخ: ${new Date().toLocaleDateString('ar-EG')} |
-                    عدد المنتجات: ${filteredProducts.length}
-                </p>
-            </div>
-            <table style="width: 100%; border-collapse: collapse; font-size: 12px;">
-                <thead>
-                    <tr style="background: #f0f0f0;">
-                        <th style="border: 1px solid #ddd; padding: 8px; text-align: right;">الكود</th>
-                        <th style="border: 1px solid #ddd; padding: 8px; text-align: right;">الشركة</th>
-                        <th style="border: 1px solid #ddd; padding: 8px; text-align: right;">الاسم بالعربي</th>
-                        <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">English Name</th>
-                    </tr>
-                </thead>
-                <tbody>
-        `;
+        // Professional Header
+        csvContent += '=======================================================\n';
+        csvContent += 'عطور أبو عمار - ABO AMMAR PERFUMES\n';
+        csvContent += '=======================================================\n';
+        csvContent += 'كتالوج المنتجات - Product Catalog\n\n';
 
-        filteredProducts.forEach((product, index) => {
-            const bgColor = index % 2 === 0 ? '#fafafa' : 'white';
-            htmlContent += `
-                <tr style="background: ${bgColor};">
-                    <td style="border: 1px solid #ddd; padding: 6px; text-align: right;">${product.code}</td>
-                    <td style="border: 1px solid #ddd; padding: 6px; text-align: right;">${product.company.toUpperCase()}</td>
-                    <td style="border: 1px solid #ddd; padding: 6px; text-align: right;">${product.nameAr}</td>
-                    <td style="border: 1px solid #ddd; padding: 6px; text-align: left; direction: ltr;">${product.nameEn}</td>
-                </tr>
-            `;
+        // Contact Information
+        csvContent += '--- معلومات التواصل / Contact Information ---\n';
+        csvContent += 'WhatsApp / واتساب: +20 103 263 7495\n';
+        csvContent += 'Available 24/7 - متاح على مدار الساعة\n';
+        csvContent += '100% Original Products - جميع المنتجات أصلية 100%\n\n';
+
+        // Date and Count
+        const today = new Date().toLocaleDateString('ar-EG');
+        csvContent += `التاريخ / Date: ${today}\n`;
+        csvContent += `عدد المنتجات / Total Products: ${filteredProducts.length}\n`;
+        csvContent += '=======================================================\n\n';
+
+        // Table Headers
+        csvContent += 'الكود,الشركة,الاسم بالعربي,English Name\n';
+
+        // Add all products
+        filteredProducts.forEach(product => {
+            const code = `"${product.code}"`;
+            const company = `"${product.company.toUpperCase()}"`;
+            const nameAr = `"${product.nameAr.replace(/"/g, '""')}"`;
+            const nameEn = `"${product.nameEn.replace(/"/g, '""')}"`;
+            csvContent += `${code},${company},${nameAr},${nameEn}\n`;
         });
 
-        htmlContent += `
-                </tbody>
-            </table>
-            <div style="text-align: center; margin-top: 30px; color: #666;">
-                <p>ABO AMMAR PERFUMES - عطور أبو عمار</p>
-                <p>WhatsApp: +20 103 263 7495</p>
-            </div>
-        `;
+        // Footer
+        csvContent += '\n=======================================================\n';
+        csvContent += 'ABO AMMAR PERFUMES - عطور أبو عمار\n';
+        csvContent += 'WhatsApp: +20 103 263 7495\n';
+        csvContent += '=======================================================\n';
 
-        pdfContainer.innerHTML = htmlContent;
-        document.body.appendChild(pdfContainer);
+        // Create and download CSV file
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        const url = URL.createObjectURL(blob);
 
-        // Wait for fonts to load
-        await document.fonts.ready;
+        link.setAttribute('href', url);
+        link.setAttribute('download', `AboAmmar_Catalog_${new Date().getTime()}.csv`);
+        link.style.visibility = 'hidden';
 
-        // Use html2canvas to render the content
-        const canvas = await html2canvas(pdfContainer, {
-            scale: 1.5,
-            useCORS: true,
-            logging: false,
-            backgroundColor: '#ffffff',
-            windowWidth: 800,
-            windowHeight: pdfContainer.scrollHeight
-        });
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
 
-        // Remove temporary container
-        document.body.removeChild(pdfContainer);
-
-        // Create PDF from canvas with JPEG for better compatibility
-        const { jsPDF } = window.jspdf;
-
-        const imgWidth = 210; // A4 width in mm
-        const pageHeight = 297; // A4 height in mm
-        const imgHeight = (canvas.height * imgWidth) / canvas.width;
-
-        const doc = new jsPDF('p', 'mm', 'a4');
-
-        // Convert canvas to JPEG instead of PNG to avoid corruption
-        const imgData = canvas.toDataURL('image/jpeg', 0.85);
-
-        let heightLeft = imgHeight;
-        let position = 0;
-
-        // Add first page
-        doc.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight, undefined, 'FAST');
-        heightLeft -= pageHeight;
-
-        // Add additional pages if needed
-        while (heightLeft > 0) {
-            position = heightLeft - imgHeight;
-            doc.addPage();
-            doc.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight, undefined, 'FAST');
-            heightLeft -= pageHeight;
-        }
-
-        // Save PDF
-        const filename = `AboAmmar_Catalog_${new Date().getTime()}.pdf`;
-        doc.save(filename);
-
-        showToast('تم تحميل الكتالوج بنجاح ✓', 'success');
-        console.log(`📄 PDF Downloaded: ${filteredProducts.length} products with Arabic support`);
+        showToast('تم تحميل الكتالوج بنجاح ✓ (Excel/CSV)', 'success');
+        console.log(`📄 CSV Downloaded: ${filteredProducts.length} products with perfect Arabic`);
 
     } catch (error) {
-        console.error('❌ Error generating PDF:', error);
+        console.error('❌ Error generating catalog:', error);
         showToast('حدث خطأ في إنشاء الكتالوج', 'error');
     }
 }

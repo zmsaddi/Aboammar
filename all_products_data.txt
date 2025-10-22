@@ -1,0 +1,4 @@
+"الكود","الشركة","الصنف"
+"5025","GM","اكس او فكتوريا سكرت - XO Victoria's Secret"
+"2038","GM","ديفن عود روبرتو كافالي - Divine Oud Roberto Cavalli"
+"2527","GM","سويت بيا بوس ديليكيت بات & بادي 2 - SWEET PEA BOIS DELICAT Bath & Body 2"

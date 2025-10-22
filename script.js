@@ -303,12 +303,12 @@ async function downloadCatalogPDF() {
         doc.setTextColor(255, 255, 255);
         doc.text('WhatsApp', 177.5, 18.5, { align: 'center' });
 
-        // Make button clickable - web.whatsapp.com DIRECT link (NO intermediate screen)
-        // ISSUE FOUND: wa.me on desktop shows "Do you have WhatsApp Desktop?" screen (bad UX)
-        // SOLUTION: web.whatsapp.com/send goes DIRECTLY to WhatsApp Web (no popups)
-        // WORKS ON: Mobile (redirects to app), Desktop (opens web directly), All PDF viewers
+        // Make button clickable - wa.me is the BEST balance for mobile + desktop
+        // MOBILE: Opens WhatsApp app directly (perfect!)
+        // DESKTOP: Shows intermediate screen asking about Desktop app, then opens web (acceptable trade-off)
+        // This is better than forcing web version on mobile users who have the app installed
         doc.link(155, 10, 45, 14, {
-            url: 'https://web.whatsapp.com/send?phone=201032637495&text=' + encodeURIComponent('مرحباً، أود الاستفسار عن منتجاتكم')
+            url: 'https://wa.me/201032637495?text=' + encodeURIComponent('مرحباً، أود الاستفسار عن منتجاتكم')
         });
 
         // Prepare table data

@@ -303,9 +303,9 @@ async function downloadCatalogPDF() {
         doc.setTextColor(255, 255, 255);
         doc.text('WhatsApp', 177.5, 18.5, { align: 'center' });
 
-        // Make button clickable - opens WhatsApp
+        // Make button clickable - opens WhatsApp (desktop compatible)
         doc.link(155, 10, 45, 14, {
-            url: 'https://wa.me/201032637495?text=' + encodeURIComponent('مرحباً، أود الاستفسار عن منتجاتكم')
+            url: 'https://web.whatsapp.com/send?phone=201032637495&text=' + encodeURIComponent('مرحباً، أود الاستفسار عن منتجاتكم')
         });
 
         // Prepare table data

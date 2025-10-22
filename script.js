@@ -474,37 +474,46 @@ async function downloadCatalogPDF() {
         pdfContainer.innerHTML = htmlContent;
         document.body.appendChild(pdfContainer);
 
+        // Wait for fonts to load
+        await document.fonts.ready;
+
         // Use html2canvas to render the content
         const canvas = await html2canvas(pdfContainer, {
-            scale: 2,
+            scale: 1.5,
             useCORS: true,
             logging: false,
-            backgroundColor: '#ffffff'
+            backgroundColor: '#ffffff',
+            windowWidth: 800,
+            windowHeight: pdfContainer.scrollHeight
         });
 
         // Remove temporary container
         document.body.removeChild(pdfContainer);
 
-        // Create PDF from canvas
+        // Create PDF from canvas with JPEG for better compatibility
         const { jsPDF } = window.jspdf;
-        const imgData = canvas.toDataURL('image/png');
 
         const imgWidth = 210; // A4 width in mm
-        const imgHeight = (canvas.height * imgWidth) / canvas.width;
         const pageHeight = 297; // A4 height in mm
+        const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
         const doc = new jsPDF('p', 'mm', 'a4');
+
+        // Convert canvas to JPEG instead of PNG to avoid corruption
+        const imgData = canvas.toDataURL('image/jpeg', 0.85);
+
         let heightLeft = imgHeight;
         let position = 0;
 
-        // Add image to PDF, splitting into pages if needed
-        doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+        // Add first page
+        doc.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight, undefined, 'FAST');
         heightLeft -= pageHeight;
 
+        // Add additional pages if needed
         while (heightLeft > 0) {
             position = heightLeft - imgHeight;
             doc.addPage();
-            doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+            doc.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight, undefined, 'FAST');
             heightLeft -= pageHeight;
         }
 

@@ -1,214 +1,0 @@
-﻿<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="عطور أبو عمار - أفخم وأرقى العطور العالمية">
-    <title>عطور أبو عمار - ABO AMMAR Perfumes</title>
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-
-    <!-- Header -->
-    <header class="header">
-        <div class="container">
-            <div class="header-content">
-                <div class="logo-section">
-                    <img src="a.00.jpg" alt="ABO AMMAR Logo" class="logo">
-                    <div class="brand">
-                        <h1>عطور أبو عمار</h1>
-                        <p>ABO AMMAR Perfumes</p>
-                    </div>
-                </div>
-                <div class="header-actions">
-                    <a href="whatsapp://send?phone=201032637495&text=مرحباً، أود الاستفسار عن منتجاتكم" class="whatsapp-header-btn" target="_blank" rel="noopener noreferrer">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 0C5.373 0 0 5.373 0 12c0 2.118.553 4.105 1.521 5.834L0 24l6.315-1.521C8.115 23.447 10.027 24 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm5.947 17.219c-.27.758-1.588 1.399-2.197 1.458-.563.055-1.086.262-3.666-.764-3.129-1.244-5.137-4.447-5.293-4.652-.152-.205-1.277-1.7-1.277-3.244 0-1.543.809-2.301 1.096-2.615.287-.314.627-.393.836-.393.209 0 .418.002.602.011.193.009.451-.073.705.537.263.627.896 2.184.975 2.342.078.158.131.342.026.547-.105.205-.158.334-.313.514-.157.18-.33.402-.471.539-.157.151-.32.314-.138.615.182.301.811 1.336 1.74 2.164 1.195 1.066 2.201 1.396 2.514 1.553.314.158.496.131.678-.078.184-.209.785-.916 1-1.23.209-.314.42-.262.705-.158.287.105 1.82.858 2.133 1.014.314.157.523.236.602.365.078.131.078.758-.191 1.516z"/>
-                        </svg>
-                        واتساب
-                    </a>
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <!-- Tabs Navigation -->
-    <nav class="tabs-nav">
-        <div class="container">
-            <div class="tabs">
-                <button class="tab-btn active" data-tab="products">
-                    <span class="tab-icon">🛍️</span>
-                    <span class="tab-text">المنتجات</span>
-                </button>
-                <button class="tab-btn" data-tab="about">
-                    <span class="tab-icon">ℹ️</span>
-                    <span class="tab-text">من نحن</span>
-                </button>
-                <button class="tab-btn" data-tab="contact">
-                    <span class="tab-icon">📞</span>
-                    <span class="tab-text">اتصل بنا</span>
-                </button>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Tab Contents -->
-    <main class="main-content">
-
-        <!-- Products Tab -->
-        <div class="tab-content active" id="products-tab">
-            <div class="container">
-                <!-- Hero Section -->
-                <div class="hero-section">
-                    <h2>اكتشف عالم العطور الفاخرة</h2>
-                    <p>أكثر من 2000 عطر من أرقى العلامات العالمية</p>
-                    <button onclick="downloadCatalogPDF()" class="download-btn">
-                        📄 تحميل الكتالوج PDF
-                    </button>
-                </div>
-
-                <!-- Filters -->
-                <div class="filters-section">
-                    <div class="filter-row">
-                        <div class="search-box">
-                            <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                <circle cx="11" cy="11" r="8"></circle>
-                                <path d="m21 21-4.35-4.35"></path>
-                            </svg>
-                            <input type="text" id="search" placeholder="ابحث عن عطر..." class="search-input">
-                        </div>
-                        <div class="filter-group">
-                            <label>الشركة:</label>
-                            <select id="company-filter" class="filter-select">
-                                <option value="">الكل</option>
-                            </select>
-                        </div>
-                        <div class="results-count">
-                            <span id="product-count">0</span> منتج
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Products Grid -->
-                <div id="loading" class="loading-state">
-                    <div class="loader"></div>
-                    <p>جاري التحميل...</p>
-                </div>
-
-                <div id="no-results" class="no-results" style="display: none;">
-                    <p>لا توجد منتجات مطابقة</p>
-                </div>
-
-                <div id="products-grid" class="products-grid"></div>
-            </div>
-        </div>
-
-        <!-- About Tab -->
-        <div class="tab-content" id="about-tab">
-            <div class="container">
-                <div class="about-content">
-                    <div class="about-header">
-                        <img src="a.00.jpg" alt="ABO AMMAR" class="about-logo-large">
-                        <h2>عطور أبو عمار</h2>
-                        <p class="tagline">وجهتك الأولى للعطور الفاخرة</p>
-                    </div>
-
-                    <div class="about-text">
-                        <h3>من نحن</h3>
-                        <p>نحن في عطور أبو عمار نفخر بتقديم أرقى وأفخم العطور العالمية من أشهر العلامات التجارية. مع مجموعة تضم أكثر من 2000 عطر متنوع، نضمن لك تجربة استثنائية في عالم العطور الفاخرة.</p>
-
-                        <p>تميزنا يكمن في التزامنا بتقديم منتجات أصلية 100% بأفضل الأسعار، مع خدمة عملاء متميزة تضمن رضاك التام.</p>
-                    </div>
-
-                    <div class="features-grid">
-                        <div class="feature-card">
-                            <div class="feature-icon">✓</div>
-                            <h4>منتجات أصلية</h4>
-                            <p>جميع العطور أصلية ومضمونة 100%</p>
-                        </div>
-                        <div class="feature-card">
-                            <div class="feature-icon">✓</div>
-                            <h4>تنوع هائل</h4>
-                            <p>أكثر من 2000 عطر متنوع</p>
-                        </div>
-                        <div class="feature-card">
-                            <div class="feature-icon">✓</div>
-                            <h4>خدمة متميزة</h4>
-                            <p>فريق محترف لخدمتك</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Contact Tab -->
-        <div class="tab-content" id="contact-tab">
-            <div class="container">
-                <div class="contact-content">
-                    <h2>تواصل معنا</h2>
-                    <p class="contact-subtitle">نحن هنا للإجابة على استفساراتك</p>
-
-                    <div class="contact-cards">
-                        <a href="whatsapp://send?phone=201032637495&text=مرحباً، أود الاستفسار عن منتجاتكم"
-                           target="_blank"
-                           rel="noopener noreferrer"
-                           class="contact-card whatsapp">
-                            <div class="contact-icon">
-                                <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M12 0C5.373 0 0 5.373 0 12c0 2.118.553 4.105 1.521 5.834L0 24l6.315-1.521C8.115 23.447 10.027 24 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm5.947 17.219c-.27.758-1.588 1.399-2.197 1.458-.563.055-1.086.262-3.666-.764-3.129-1.244-5.137-4.447-5.293-4.652-.152-.205-1.277-1.7-1.277-3.244 0-1.543.809-2.301 1.096-2.615.287-.314.627-.393.836-.393.209 0 .418.002.602.011.193.009.451-.073.705.537.263.627.896 2.184.975 2.342.078.158.131.342.026.547-.105.205-.158.334-.313.514-.157.18-.33.402-.471.539-.157.151-.32.314-.138.615.182.301.811 1.336 1.74 2.164 1.195 1.066 2.201 1.396 2.514 1.553.314.158.496.131.678-.078.184-.209.785-.916 1-1.23.209-.314.42-.262.705-.158.287.105 1.82.858 2.133 1.014.314.157.523.236.602.365.078.131.078.758-.191 1.516z"/>
-                                </svg>
-                            </div>
-                            <h3>واتساب</h3>
-                            <p dir="ltr">+20 103 263 7495</p>
-                            <span class="cta-button">ابدأ المحادثة</span>
-                        </a>
-                    </div>
-
-                    <div class="info-section">
-                        <h3>الموقع الإلكتروني</h3>
-                        <p><a href="https://aboammar.vercel.app" target="_blank" rel="noopener noreferrer">https://aboammar.vercel.app</a></p>
-
-                        <h3>ساعات العمل</h3>
-                        <p>متاح على مدار الساعة - 24/7</p>
-
-                        <h3>الضمان</h3>
-                        <p>جميع المنتجات أصلية 100%</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </main>
-
-    <!-- WhatsApp Floating Button -->
-    <a href="whatsapp://send?phone=201032637495&text=مرحباً، أود الاستفسار عن منتجاتكم"
-       target="_blank"
-       rel="noopener noreferrer"
-       class="whatsapp-float"
-       aria-label="WhatsApp">
-        <svg viewBox="0 0 32 32" fill="currentColor">
-            <path d="M16 0C7.164 0 0 7.164 0 16c0 2.825.738 5.48 2.028 7.784L0 32l8.384-2.028C10.688 31.262 13.344 32 16 32c8.836 0 16-7.164 16-16S24.836 0 16 0zm0 29.333c-2.453 0-4.787-.664-6.784-1.82l-.488-.284-5.057 1.224 1.244-4.98-.311-.508C3.331 20.787 2.667 18.453 2.667 16 2.667 8.636 8.636 2.667 16 2.667S29.333 8.636 29.333 16 23.364 29.333 16 29.333zm7.293-9.96c-.4-.2-2.365-1.169-2.731-1.302-.365-.133-.631-.2-.897.2-.267.4-1.031 1.302-1.265 1.569-.233.267-.465.3-.865.1-.4-.2-1.689-.623-3.217-1.985-1.189-1.061-1.992-2.371-2.225-2.771-.233-.4-.025-.617.175-.816.18-.18.4-.465.6-.698.2-.233.267-.4.4-.665.133-.267.067-.5-.033-.698-.1-.2-.897-2.165-1.231-2.965-.325-.78-.655-.674-.897-.687-.233-.012-.5-.015-.765-.015s-.698.1-1.064.5c-.365.4-1.398 1.369-1.398 3.335s1.431 3.868 1.631 4.135c.2.267 2.825 4.315 6.844 6.052.957.414 1.704.661 2.287.846.961.305 1.836.262 2.527.159.771-.115 2.365-.968 2.699-1.902.333-.935.333-1.736.233-1.902-.1-.167-.365-.267-.765-.465z"/>
-        </svg>
-    </a>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <p>&copy; 2024 عطور أبو عمار - ABO AMMAR Perfumes</p>
-            <p>WhatsApp: +20 103 263 7495 | <a href="https://aboammar.vercel.app">https://aboammar.vercel.app</a></p>
-        </div>
-    </footer>
-
-    <!-- Scripts -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
-    <script src="amiri-font.js"></script>
-    <script src="products.js"></script>
-    <script src="script.js"></script>
-</body>
-</html>

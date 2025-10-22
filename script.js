@@ -413,6 +413,16 @@ async function downloadCatalogPDF() {
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF('p', 'mm', 'a4');
 
+        // Add Arabic font support
+        if (typeof addArabicFont === 'function') {
+            const fontAdded = addArabicFont(doc);
+            if (fontAdded) {
+                console.log('✓ Arabic font enabled for PDF');
+            }
+        } else {
+            console.warn('⚠ Arabic font not available, using fallback');
+        }
+
         const pageWidth = doc.internal.pageSize.width;
         let yPos = 20;
 
@@ -475,7 +485,12 @@ async function downloadCatalogPDF() {
                 0: { cellWidth: 25, halign: 'center' },
                 1: { cellWidth: 25, halign: 'center' },
                 2: { cellWidth: 70, halign: 'left' },
-                3: { cellWidth: 60, halign: 'right' }
+                3: {
+                    cellWidth: 60,
+                    halign: 'right',
+                    font: 'Amiri',  // Use Amiri font for Arabic
+                    fontSize: 9
+                }
             },
             alternateRowStyles: {
                 fillColor: [250, 250, 250]

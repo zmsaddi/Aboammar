@@ -203,11 +203,10 @@ function createProductCard(product) {
 
     const whatsappMessage =
         `مرحباً، أنا مهتم بالمنتج:\n` +
-        `الاسم بالعربي: ${product.nameAr}\n` +
-        `English Name: ${product.nameEn}\n` +
+        `${product.nameAr}\n` +
+        `${product.nameEn}\n` +
         `الكود: ${product.code}\n` +
-        `الشركة: ${product.company.toUpperCase()}\n\n` +
-        `الموقع: https://aboammar.vercel.app`;
+        `الشركة: ${product.company.toUpperCase()}`;
 
     const whatsappLink = getUniversalWhatsAppLink('201032637495', whatsappMessage);
 

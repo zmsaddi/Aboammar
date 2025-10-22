@@ -242,7 +242,7 @@ function createProductCard(product) {
 }
 
 // ===================================
-// PDF DOWNLOAD FUNCTIONALITY
+// PDF DOWNLOAD FUNCTIONALITY - OPTIMIZED FOR 30 PRODUCTS PER PAGE
 // ===================================
 
 async function downloadCatalogPDF() {
@@ -259,27 +259,26 @@ async function downloadCatalogPDF() {
             }
         }
 
-        // PDF Header
+        // PDF Header - COMPACT for 30 products per page
         doc.setFillColor(0, 0, 0);
-        doc.rect(0, 0, 210, 40, 'F');
+        doc.rect(0, 0, 210, 28, 'F');
 
         // Title
         if (fontAdded) {
             doc.setFont('Amiri');
         }
-        doc.setFontSize(24);
+        doc.setFontSize(18);
         doc.setTextColor(212, 175, 55);
-        doc.text('عطور أبو عمار', 105, 15, { align: 'center' });
+        doc.text('عطور أبو عمار', 105, 10, { align: 'center' });
 
-        doc.setFontSize(14);
+        doc.setFontSize(11);
         doc.setTextColor(200, 200, 200);
-        doc.text('ABO AMMAR Perfumes', 105, 25, { align: 'center' });
+        doc.text('ABO AMMAR Perfumes', 105, 17, { align: 'center' });
 
         // Contact Info
-        doc.setFontSize(10);
+        doc.setFontSize(8);
         doc.setTextColor(255, 255, 255);
-        doc.text('WhatsApp: +20 103 263 7495', 105, 32, { align: 'center' });
-        doc.text('https://aboammar.vercel.app', 105, 37, { align: 'center' });
+        doc.text('WhatsApp: +20 103 263 7495 | https://aboammar.vercel.app', 105, 24, { align: 'center' });
 
         // Prepare table data
         const tableData = filteredProducts.map(product => [
@@ -289,72 +288,73 @@ async function downloadCatalogPDF() {
             product.nameAr
         ]);
 
-        // Create table with FULL Arabic support - CENTERED & EXTRA LARGE FONTS
+        // Create table - OPTIMIZED for 30 products per A4 page
         doc.autoTable({
-            startY: 45,
+            startY: 32,
             head: [['الكود', 'الشركة', 'English Name', 'الاسم بالعربي']],
             body: tableData,
             headStyles: {
                 fillColor: [212, 175, 55],
                 textColor: [0, 0, 0],
-                fontSize: 14,  // EXTRA LARGE header font (was 12)
+                fontSize: 10,
                 fontStyle: 'bold',
                 halign: 'center',
                 valign: 'middle',
+                cellPadding: 2,
                 font: fontAdded ? 'Amiri' : 'helvetica'
             },
             bodyStyles: {
-                textColor: [0, 0, 0],  // Pure black
-                fontSize: 13,  // LARGER body font (was 11)
-                cellPadding: 5,  // More padding
+                textColor: [0, 0, 0],
+                fontSize: 9,
+                cellPadding: 2,
                 valign: 'middle',
-                halign: 'center',  // CENTER all text
+                halign: 'center',
                 font: fontAdded ? 'Amiri' : 'helvetica'
             },
             alternateRowStyles: {
-                fillColor: [248, 248, 248]  // Lighter alternate rows
+                fillColor: [248, 248, 248]
             },
             columnStyles: {
                 0: {
-                    cellWidth: 25,
+                    cellWidth: 28,
                     halign: 'center',
                     valign: 'middle',
                     textColor: [0, 0, 0],
-                    fontSize: 13
+                    fontSize: 9
                 },
                 1: {
-                    cellWidth: 25,
+                    cellWidth: 20,
                     halign: 'center',
                     valign: 'middle',
                     font: fontAdded ? 'Amiri' : 'helvetica',
                     textColor: [0, 0, 0],
-                    fontSize: 13
+                    fontSize: 9
                 },
                 2: {
-                    cellWidth: 60,
+                    cellWidth: 65,
                     halign: 'center',
                     valign: 'middle',
                     font: fontAdded ? 'Amiri' : 'helvetica',
                     textColor: [0, 0, 0],
-                    fontSize: 13
+                    fontSize: 9
                 },
                 3: {
-                    cellWidth: 60,
-                    halign: 'center',  // CENTERED Arabic text
+                    cellWidth: 65,
+                    halign: 'center',
                     valign: 'middle',
                     font: fontAdded ? 'Amiri' : 'helvetica',
-                    fontSize: 14,  // LARGEST font for Arabic (was 12)
+                    fontSize: 10,
                     textColor: [0, 0, 0],
-                    fontStyle: 'bold'  // Bold Arabic text for emphasis
+                    fontStyle: 'bold'
                 }
             },
-            margin: { top: 45, right: 15, bottom: 20, left: 15 },
+            margin: { top: 32, right: 10, bottom: 15, left: 10 },
             theme: 'grid',
             styles: {
                 lineColor: [200, 200, 200],
                 lineWidth: 0.1,
-                font: fontAdded ? 'Amiri' : 'helvetica',  // Default Arabic font
-                minCellHeight: 10  // Minimum row height for better spacing
+                font: fontAdded ? 'Amiri' : 'helvetica',
+                minCellHeight: 7
             }
         });
 

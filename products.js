@@ -504,8 +504,8 @@ const productsData = [
   {
     "code": "40017",
     "company": "ib",
-    "nameAr": "انجل ANGEL C",
-    "nameEn": "C"
+    "nameAr": "انجل C",
+    "nameEn": "ANGEL C"
   },
   {
     "code": "3000",

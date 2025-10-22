@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+import sys
+sys.stdout.reconfigure(encoding='utf-8')
+
+html_content = '''<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
@@ -177,4 +180,9 @@
     <script src="products.js"></script>
     <script src="script.js"></script>
 </body>
-</html>
+</html>'''
+
+with open('index.html', 'w', encoding='utf-8-sig') as f:
+    f.write(html_content)
+
+print('HTML file created successfully with UTF-8-BOM encoding')

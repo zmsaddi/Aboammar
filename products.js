@@ -564,8 +564,8 @@ const productsData = [
   {
     "code": "11157",
     "company": "GM",
-    "nameAr": "اولمبيا ليجند",
-    "nameEn": "باكو ريبان - OLYMPEA LEGEND Paco Rabanne"
+    "nameAr": "اولمبيا ليجند-باكو ريبان",
+    "nameEn": "OLYMPEA LEGEND Paco Rabanne"
   },
   {
     "code": "51021",
@@ -636,8 +636,8 @@ const productsData = [
   {
     "code": "36.8536",
     "company": "ib",
-    "nameAr": "اسكيب",
-    "nameEn": "باراديس - ESCAPE PARADISE"
+    "nameAr": "اسكيب-باراديس ",
+    "nameEn": "ESCAPE PARADISE"
   },
   {
     "code": "36.8105",
@@ -697,13 +697,13 @@ const productsData = [
     "code": "23791",
     "company": "GM",
     "nameAr": "الحجر الاسود",
-    "nameEn": "الحجر الاسود"
+    "nameEn": "BLACK STONE"
   },
   {
     "code": "36.0609",
     "company": "ib",
     "nameAr": "الحجر الاسود",
-    "nameEn": "الحجر الاسود"
+    "nameEn": "BLACK STONE"
   },
   {
     "code": "1821",
@@ -774,8 +774,8 @@ const productsData = [
   {
     "code": "3083",
     "company": "GM",
-    "nameAr": "انتيمتلي",
-    "nameEn": "بيكهام (نسائي) (W) - INIMATLY-BECKHAM"
+    "nameAr": "انتيمتلي-بيكهام (نسائي) (W) ",
+    "nameEn": "INIMATLY-BECKHAM"
   },
   {
     "code": "61332",
@@ -2035,7 +2035,7 @@ const productsData = [
     "code": "1208736",
     "company": "ib",
     "nameAr": "افردوسكي XS بلاك",
-    "nameEn": "افردوسكي XS بلاك"
+    "nameEn": "BLACK XS OVERDOSE "
   },
   {
     "code": "43/70580",
@@ -3450,8 +3450,8 @@ const productsData = [
   {
     "code": "11162",
     "company": "GM",
-    "nameAr": "داي دريمز",
-    "nameEn": "مونتال - DAY DREAMS - MONTAL"
+    "nameAr": "مونتال - داي دريمز",
+    "nameEn": "DAY DREAMS - MONTAL"
   },
   {
     "code": "69274",
@@ -3504,8 +3504,8 @@ const productsData = [
   {
     "code": "61057",
     "company": "GM",
-    "nameAr": "ذا جيم",
-    "nameEn": "دافيدوف - THE Gym - DAVIDOFF"
+    "nameAr": "ذا جيم-دافيدوف",
+    "nameEn": "THE Gym - DAVIDOFF"
   },
   {
     "code": "82232",
@@ -3564,8 +3564,8 @@ const productsData = [
   {
     "code": "59425",
     "company": "GM",
-    "nameAr": "کیه",
-    "nameEn": "دولتشي جابانا - K - DOLCE & GABBANA"
+    "nameAr": "دولتشي جابانا - کیه",
+    "nameEn": "K - DOLCE & GABBANA"
   },
   {
     "code": "57460",
@@ -3577,7 +3577,7 @@ const productsData = [
     "code": "39/40523",
     "company": "GM",
     "nameAr": "ليل سحري دولتشي جابانا",
-    "nameEn": "ليل سحري دولتشي جابانا"
+    "nameEn": " MYSTERIOUS NIGHT- DOLCE & GABBANA"
   },
   {
     "code": "41/57356",
@@ -3600,14 +3600,14 @@ const productsData = [
   {
     "code": "41/3539",
     "company": "GM",
-    "nameAr": "کیه",
-    "nameEn": "دولتشي جابانا - K by Dolce & Gabbana"
+    "nameAr": "دولتشي جابانا - کیه",
+    "nameEn": "K by Dolce & Gabbana"
   },
   {
     "code": "41/5025",
     "company": "GM",
-    "nameAr": "کیه",
-    "nameEn": "دولتشي جابانا - K - Dolce & Gabbana"
+    "nameAr": "دولتشي جابانا -کیه",
+    "nameEn": " K - Dolce & Gabbana"
   },
   {
     "code": "262/8789",
@@ -4105,7 +4105,7 @@ const productsData = [
     "code": "34/88102",
     "company": "GM",
     "nameAr": "سوفاج اليكسر ديور (منتج طبيعي)",
-    "nameEn": "سوفاج اليكسر ديور (منتج طبيعي)"
+    "nameEn": "Suvage ELIXIR Dior (NATURAL)"
   },
   {
     "code": "33/88101-A",
@@ -4548,8 +4548,8 @@ const productsData = [
   {
     "code": "61004",
     "company": "GM",
-    "nameAr": "صندل روبي",
-    "nameEn": "كارولينا هيريرا - Sandal Ruby - Carolina Herrera"
+    "nameAr": "كارولينا هيريرا - صندل روبي",
+    "nameEn": "Sandal Ruby - Carolina Herrera"
   },
   {
     "code": "1556645",
@@ -4896,8 +4896,8 @@ const productsData = [
   {
     "code": "11160",
     "company": "GM",
-    "nameAr": "عود ليجند",
-    "nameEn": "مونتال - OUD LEGEND - MONTAL"
+    "nameAr": "مونتال - عود ليجند",
+    "nameEn": "OUD LEGEND - MONTAL"
   },
   {
     "code": "11167",
@@ -6822,8 +6822,8 @@ const productsData = [
   {
     "code": "70359",
     "company": "ib",
-    "nameAr": "مسكي جاردن",
-    "nameEn": "مانسيرا - Mancera Musky Garden"
+    "nameAr": "مانسيرا -مسكي جاردن",
+    "nameEn": " Mancera Musky Garden"
   },
   {
     "code": "6464",
@@ -6852,8 +6852,8 @@ const productsData = [
   {
     "code": "82723",
     "company": "GM",
-    "nameAr": "ماي واي",
-    "nameEn": "نساء العالم - My Way J'adore Christian Dior"
+    "nameAr": "نساء العالم - ماي واي",
+    "nameEn": "My Way J'adore Christian Dior"
   },
   {
     "code": "39/40520",
@@ -7272,8 +7272,8 @@ const productsData = [
   {
     "code": "AF 5213/A",
     "company": "GM",
-    "nameAr": "واي اليكسير ايف سان لوران",
-    "nameEn": "منتج طبيعي - Y LA PERFUEM Yves Saint Laurent 2021"
+    "nameAr": "منتج طبيعي - واي اليكسير ايف سان لوران",
+    "nameEn": " Y LA PERFUEM Yves Saint Laurent 2021"
   },
   {
     "code": "13/61323",
@@ -7600,12 +7600,6 @@ const productsData = [
     "nameEn": "Yes I Am Fabulous Casharel"
   },
   {
-    "code": "الكود",
-    "company": "الشركة",
-    "nameAr": "الصنف",
-    "nameEn": "الصنف"
-  },
-  {
     "code": "21/66556",
     "company": "GM",
     "nameAr": "انوتة ارض الخليج",
@@ -7746,8 +7740,8 @@ const productsData = [
   {
     "code": "42/6776",
     "company": "GM",
-    "nameAr": "كيركي",
-    "nameEn": "منتج طبيعي - Kirke"
+    "nameAr": "منتج طبيعي - كيركي",
+    "nameEn": "Kirke"
   },
   {
     "code": "31/3735",
@@ -8161,7 +8155,7 @@ const productsData = [
     "code": "33561",
     "company": "ib",
     "nameAr": "عود سيوفي الرصاصي",
-    "nameEn": "عود سيوفي الرصاصي"
+    "nameEn": "SYOFI OUD RASASI"
   },
   {
     "code": "1056021",
@@ -8221,7 +8215,7 @@ const productsData = [
     "code": "5035",
     "company": "GM",
     "nameAr": "مخلط عود (الرصاصي)",
-    "nameEn": "مخلط عود (الرصاصي)"
+    "nameEn": "OUD MIX"
   },
   {
     "code": "24348",
@@ -8263,7 +8257,7 @@ const productsData = [
     "code": "3162",
     "company": "GM",
     "nameAr": "عطري سعيد احمد",
-    "nameEn": "عطري سعيد احمد"
+    "nameEn": "SAID AHMAD"
   },
   {
     "code": "11175",
@@ -8286,8 +8280,8 @@ const productsData = [
   {
     "code": "51050",
     "company": "GM",
-    "nameAr": "لورد جورج",
-    "nameEn": "بنهاليجونز - Lord George Penhaligon's"
+    "nameAr": "بنهاليجونز - لورد جورج",
+    "nameEn": "Lord George Penhaligon's"
   },
   {
     "code": "21/66511",
@@ -8676,8 +8670,8 @@ const productsData = [
   {
     "code": "21/66557",
     "company": "GM",
-    "nameAr": "رشيق",
-    "nameEn": "سويس اربیان - Rasheeq - Swiss Arabian"
+    "nameAr": "سويس اربیان - رشيق",
+    "nameEn": "Rasheeq - Swiss Arabian"
   },
   {
     "code": "21/66530",
@@ -9019,7 +9013,7 @@ const productsData = [
     "code": "61319",
     "company": "GM",
     "nameAr": "ديلينا لازور بيرفيوم دي مارلي",
-    "nameEn": "ديلينا لازور بيرفيوم دي مارلي"
+    "nameEn": "Delina Parfume de Marly"
   },
   {
     "code": "61307",
@@ -9037,7 +9031,7 @@ const productsData = [
     "code": "21/66467",
     "company": "GM",
     "nameAr": "بيجاسوس اكسلوسيف دي مارلي",
-    "nameEn": "بيجاسوس اكسلوسيف دي مارلي"
+    "nameEn": "Pegasus EXCLUSIVE Parfume de Marly"
   },
   {
     "code": "42/63425",
@@ -9214,12 +9208,6 @@ const productsData = [
     "nameEn": "N°1 de Chanel L'Eau Rouge Chanel 2022"
   },
   {
-    "code": "الكود",
-    "company": "الشركة",
-    "nameAr": "الصنف",
-    "nameEn": "الصنف"
-  },
-  {
     "code": "42/65955",
     "company": "GM",
     "nameAr": "الطف الشايع",
@@ -9373,7 +9361,7 @@ const productsData = [
     "code": "42/67638",
     "company": "GM",
     "nameAr": "جيفنشي بر هوم",
-    "nameEn": "جيفنشي - Givenchy pour Homme Givenchy"
+    "nameEn": "Givenchy pour Homme Givenchy"
   },
   {
     "code": "42/67639",
@@ -10116,8 +10104,8 @@ const productsData = [
   {
     "code": "206/8757",
     "company": "GM",
-    "nameAr": "روزيندو ماتيو 5",
-    "nameEn": "منتج طبيعي - Rosendo Mateu Nº 5 Floral, Amber, Sensual Musk Rosendo Mateu Olfactive Expressions"
+    "nameAr": "منتج طبيعي - روزيندو ماتيو 5",
+    "nameEn": "Rosendo Mateu Nº 5 Floral, Amber, Sensual Musk Rosendo Mateu Olfactive Expressions"
   },
   {
     "code": "8725",
@@ -10422,8 +10410,8 @@ const productsData = [
   {
     "code": "AM 6317",
     "company": "GM",
-    "nameAr": "كلوب دي نوي سيلاج",
-    "nameEn": "ارماف 2020 - Club de Nuit Sillage Armaf 2020"
+    "nameAr": "ارماف 2020 - كلوب دي نوي سيلاج",
+    "nameEn": "Club de Nuit Sillage Armaf 2020"
   },
   {
     "code": "DXB 1882/D",
@@ -10458,20 +10446,20 @@ const productsData = [
   {
     "code": "ARA 2396",
     "company": "GM",
-    "nameAr": "بور عود",
-    "nameEn": "لويس فيتون 2021 - Pur Oud Louis Vuitton 2021"
+    "nameAr": "لويس فيتون 2021 - بور عود",
+    "nameEn": "Pur Oud Louis Vuitton 2021"
   },
   {
     "code": "DXB 9090",
     "company": "GM",
-    "nameAr": "اما جنيشن لويس فيتون",
-    "nameEn": "منتج طبيعي - Imagination Louis Vuitton"
+    "nameAr": "منتج طبيعي - اما جنيشن لويس فيتون",
+    "nameEn": "Imagination Louis Vuitton"
   },
   {
     "code": "8724/08",
     "company": "GM",
-    "nameAr": "اما جنيشن لويس فيتون",
-    "nameEn": "منتج طبيعي - Imagination Louis Vuitton"
+    "nameAr": "منتج طبيعي - اما جنيشن لويس فيتون",
+    "nameEn": "Imagination Louis Vuitton"
   },
   {
     "code": "2257",
@@ -10482,14 +10470,14 @@ const productsData = [
   {
     "code": "AM 6341",
     "company": "GM",
-    "nameAr": "اماجنيشن",
-    "nameEn": "لويس فيتون 2021 - Imagination Louis Vuitton 2021"
+    "nameAr": "لويس فيتون 2021 - اماجنيشن",
+    "nameEn": "Imagination Louis Vuitton 2021"
   },
   {
     "code": "2112288",
     "company": "ib",
-    "nameAr": "اماجنيشن",
-    "nameEn": "لويس فيتون - Imagination Louis Vuitton"
+    "nameAr": "لويس فيتون - اماجنيشن",
+    "nameEn": "Imagination Louis Vuitton"
   },
   {
     "code": "AM 6315",
@@ -10974,14 +10962,14 @@ const productsData = [
   {
     "code": "4474",
     "company": "GM",
-    "nameAr": "الثائر بيرفيوم دي مارلي",
-    "nameEn": "منتج طبيعي - Althaïr Parfums de Marly"
+    "nameAr": "منتج طبيعي - الثائر بيرفيوم دي مارلي",
+    "nameEn": "Althaïr Parfums de Marly"
   },
   {
     "code": "SOG040829",
     "company": "GM",
-    "nameAr": "الثائر بيرفيوم دي مارلي",
-    "nameEn": "منتج طبيعي - ALTHAIR PARFUMS DE MARLY"
+    "nameAr": "منتج طبيعي - الثائر بيرفيوم دي مارلي",
+    "nameEn": "ALTHAIR PARFUMS DE MARLY"
   },
   {
     "code": "6461",
@@ -12048,8 +12036,8 @@ const productsData = [
   {
     "code": "LT 3633",
     "company": "GM",
-    "nameAr": "لا بو براديس جاردن جان بول جولتير",
-    "nameEn": "منتج طبيعي - Le Beau Paradise Garden Jean Paul Gaultier"
+    "nameAr": "منتج طبيعي - لا بو براديس جاردن جان بول جولتير",
+    "nameEn": "Le Beau Paradise Garden Jean Paul Gaultier"
   },
   {
     "code": "LT 3634",
@@ -12577,7 +12565,7 @@ const productsData = [
     "code": "44/77491",
     "company": "GM",
     "nameAr": "وايت لينك ابيض درعه",
-    "nameEn": "White Woods LİNK"
+    "nameEn": "White Woods LINK"
   },
   {
     "code": "44/77492",
@@ -12853,19 +12841,19 @@ const productsData = [
     "code": "44/73815",
     "company": "GM",
     "nameAr": "طبيعي",
-    "nameEn": "طبيعي"
+    "nameEn": "NATURAL"
   },
   {
     "code": "43/77561",
     "company": "GM",
     "nameAr": "طبيعي",
-    "nameEn": "طبيعي"
+    "nameEn": "NATURAL"
   },
   {
     "code": "44/77688",
     "company": "GM",
     "nameAr": "طبيعي",
-    "nameEn": "طبيعي"
+    "nameEn": "NATURAL"
   }
 ];
 

@@ -1,85 +1,89 @@
-﻿// ===================================
-// ABO AMMAR PERFUMES - PROFESSIONAL UX
-// Modern, Fast, User-Friendly
-// ===================================
-
-// Global State
-let allProducts = [];
-let filteredProducts = [];
-let currentPage = 1;
-const productsPerPage = 24;
-let isLoading = false;
-
-// DOM Elements
-const searchInput = document.getElementById('search');
-const companyFilter = document.getElementById('company-filter');
-const productsGrid = document.getElementById('products-grid');
-const productCount = document.getElementById('product-count');
-const loading = document.getElementById('loading');
-const noResults = document.getElementById('no-results');
+/**
+ * ABO AMMAR Perfumes - Tabbed Interface Script
+ * Mobile-First Responsive JavaScript
+ */
 
 // ===================================
-// INITIALIZATION
+// TAB SWITCHING FUNCTIONALITY
 // ===================================
-document.addEventListener('DOMContentLoaded', () => {
-    initializeApp();
+
+document.addEventListener('DOMContentLoaded', function() {
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    tabButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const targetTab = button.getAttribute('data-tab');
+
+            // Remove active class from all tabs and buttons
+            tabButtons.forEach(btn => btn.classList.remove('active'));
+            tabContents.forEach(content => content.classList.remove('active'));
+
+            // Add active class to clicked button and corresponding content
+            button.classList.add('active');
+            document.getElementById(`${targetTab}-tab`).classList.add('active');
+
+            // Scroll to top smoothly when switching tabs
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    });
+
+    // Initialize products when DOM is ready
+    initializeProducts();
 });
 
-async function initializeApp() {
-    console.log('🚀 Initializing ABO AMMAR Perfumes...');
+// ===================================
+// PRODUCTS DATA & STATE
+// ===================================
 
-    // Load products
-    await loadProducts();
-
-    // Setup event listeners
-    setupEventListeners();
-
-    // Initialize UI
-    initializeUI();
-
-    // Add scroll animations
-    observeElements();
-
-    console.log('✅ App initialized successfully');
-}
+let allProducts = [];
+let filteredProducts = [];
+let displayedProducts = [];
+const PRODUCTS_PER_PAGE = 24;
 
 // ===================================
-// LOAD PRODUCTS
+// INITIALIZE PRODUCTS
 // ===================================
-async function loadProducts() {
+
+function initializeProducts() {
+    const loadingElement = document.getElementById('loading');
+    const productsGrid = document.getElementById('products-grid');
+    const noResultsElement = document.getElementById('no-results');
+
     try {
-        showLoading(true);
-
-        // Simulate async loading for better UX
-        await new Promise(resolve => setTimeout(resolve, 300));
-
+        // Check if products data is available
         if (typeof productsData === 'undefined') {
-            throw new Error('Products data not found');
+            throw new Error('Products data not loaded');
         }
 
         allProducts = productsData;
         filteredProducts = [...allProducts];
 
-        console.log(`📦 Loaded ${allProducts.length} products`);
-
         // Populate company filter
         populateCompanyFilter();
 
-        // Display products
+        // Display initial products
         displayProducts();
 
-        showLoading(false);
+        // Hide loading
+        loadingElement.style.display = 'none';
+
+        // Setup event listeners
+        setupEventListeners();
+
+        console.log(`✓ Loaded ${allProducts.length} products`);
     } catch (error) {
-        console.error('❌ Error loading products:', error);
-        showToast('حدث خطأ في تحميل المنتجات', 'error');
-        showLoading(false);
+        console.error('Error loading products:', error);
+        loadingElement.innerHTML = '<p style="color: #d4af37;">خطأ في تحميل المنتجات</p>';
     }
 }
 
 // ===================================
-// COMPANY FILTER POPULATION
+// POPULATE COMPANY FILTER
 // ===================================
+
 function populateCompanyFilter() {
+    const companyFilter = document.getElementById('company-filter');
     const companies = [...new Set(allProducts.map(p => p.company))].sort();
 
     companies.forEach(company => {
@@ -88,208 +92,98 @@ function populateCompanyFilter() {
         option.textContent = company.toUpperCase();
         companyFilter.appendChild(option);
     });
-
-    console.log(`🏢 Found ${companies.length} companies`);
 }
 
 // ===================================
-// EVENT LISTENERS
+// SETUP EVENT LISTENERS
 // ===================================
+
 function setupEventListeners() {
-    // Search input with debounce
+    const searchInput = document.getElementById('search');
+    const companyFilter = document.getElementById('company-filter');
+
+    // Debounced search
     let searchTimeout;
     searchInput.addEventListener('input', (e) => {
         clearTimeout(searchTimeout);
-        searchTimeout = setTimeout(() => handleSearch(e), 300);
-
-        // Show loading indicator
-        if (e.target.value.length > 0) {
-            searchInput.style.borderColor = 'var(--gold-primary)';
-        }
+        searchTimeout = setTimeout(() => {
+            filterProducts();
+        }, 300);
     });
 
     // Company filter
-    companyFilter.addEventListener('change', handleFilter);
-
-    // Smooth scroll for nav links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-            const target = document.querySelector(this.getAttribute('href'));
-            if (target) {
-                target.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                });
-
-                // Update active nav link
-                document.querySelectorAll('.nav-link').forEach(link => {
-                    link.classList.remove('active');
-                });
-                this.classList.add('active');
-            }
-        });
+    companyFilter.addEventListener('change', () => {
+        filterProducts();
     });
-
-    // Header scroll effect
-    let lastScroll = 0;
-    window.addEventListener('scroll', () => {
-        const currentScroll = window.pageYOffset;
-        const header = document.querySelector('.header');
-
-        if (currentScroll > 100) {
-            header.classList.add('scrolled');
-        } else {
-            header.classList.remove('scrolled');
-        }
-
-        lastScroll = currentScroll;
-    });
-
-    // Mobile menu toggle
-    const menuToggle = document.querySelector('.menu-toggle');
-    const nav = document.querySelector('.nav');
-    const mobileOverlay = document.getElementById('mobile-overlay');
-
-    if (menuToggle && nav && mobileOverlay) {
-        // Toggle menu function
-        const toggleMenu = (show) => {
-            if (show) {
-                nav.classList.add('active');
-                menuToggle.classList.add('active');
-                mobileOverlay.classList.add('active');
-                menuToggle.innerHTML = '✕';
-                document.body.style.overflow = 'hidden'; // Prevent scrolling
-            } else {
-                nav.classList.remove('active');
-                menuToggle.classList.remove('active');
-                mobileOverlay.classList.remove('active');
-                menuToggle.innerHTML = '☰';
-                document.body.style.overflow = ''; // Restore scrolling
-            }
-        };
-
-        // Menu toggle button click
-        menuToggle.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            const isActive = nav.classList.contains('active');
-            toggleMenu(!isActive);
-        });
-
-        // Close menu when clicking nav links
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', () => {
-                toggleMenu(false);
-            });
-        });
-
-        // Close menu when clicking overlay
-        mobileOverlay.addEventListener('click', () => {
-            toggleMenu(false);
-        });
-
-        // Close menu when clicking outside (for good measure)
-        document.addEventListener('click', (e) => {
-            if (nav.classList.contains('active') &&
-                !nav.contains(e.target) &&
-                !menuToggle.contains(e.target)) {
-                toggleMenu(false);
-            }
-        });
-
-        // Close menu on escape key
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && nav.classList.contains('active')) {
-                toggleMenu(false);
-            }
-        });
-    }
-
-    // Intersection observer for animations
-    observeElements();
 }
 
 // ===================================
-// SEARCH HANDLER
+// FILTER PRODUCTS
 // ===================================
-function handleSearch(e) {
-    const searchTerm = e.target.value.toLowerCase().trim();
-    const selectedCompany = companyFilter.value;
+
+function filterProducts() {
+    const searchTerm = document.getElementById('search').value.toLowerCase().trim();
+    const selectedCompany = document.getElementById('company-filter').value.toLowerCase();
 
     filteredProducts = allProducts.filter(product => {
-        const matchesSearch = searchTerm === '' ||
+        const matchesSearch = !searchTerm ||
             product.nameAr.toLowerCase().includes(searchTerm) ||
             product.nameEn.toLowerCase().includes(searchTerm) ||
             product.code.toLowerCase().includes(searchTerm);
 
-        const matchesCompany = selectedCompany === '' || product.company === selectedCompany;
+        const matchesCompany = !selectedCompany ||
+            product.company.toLowerCase() === selectedCompany;
 
         return matchesSearch && matchesCompany;
     });
 
-    currentPage = 1;
+    displayedProducts = [];
     displayProducts();
-
-    // Analytics
-    if (searchTerm.length > 0) {
-        console.log(`🔍 Search: "${searchTerm}" - Found ${filteredProducts.length} products`);
-    }
 }
 
 // ===================================
-// FILTER HANDLER
+// DISPLAY PRODUCTS
 // ===================================
-function handleFilter() {
-    handleSearch({ target: searchInput });
-}
 
-// ===================================
-// DISPLAY PRODUCTS WITH LAZY LOADING
-// ===================================
 function displayProducts() {
-    const startIndex = (currentPage - 1) * productsPerPage;
-    const endIndex = startIndex + productsPerPage;
-    const productsToShow = filteredProducts.slice(startIndex, endIndex);
+    const productsGrid = document.getElementById('products-grid');
+    const noResultsElement = document.getElementById('no-results');
+    const productCountElement = document.getElementById('product-count');
 
     // Update count
-    updateProductCount();
-
-    // Clear grid
-    productsGrid.innerHTML = '';
+    productCountElement.textContent = filteredProducts.length.toLocaleString('ar-EG');
 
     // Show/hide no results
     if (filteredProducts.length === 0) {
-        noResults.style.display = 'block';
-        productsGrid.style.display = 'none';
+        productsGrid.innerHTML = '';
+        noResultsElement.style.display = 'block';
         return;
-    } else {
-        noResults.style.display = 'none';
-        productsGrid.style.display = 'grid';
     }
 
-    // Add products with stagger animation
-    productsToShow.forEach((product, index) => {
+    noResultsElement.style.display = 'none';
+
+    // Get products to display
+    const start = displayedProducts.length;
+    const end = start + PRODUCTS_PER_PAGE;
+    const productsToAdd = filteredProducts.slice(start, end);
+
+    // Clear grid if starting fresh
+    if (start === 0) {
+        productsGrid.innerHTML = '';
+    }
+
+    // Add products
+    productsToAdd.forEach(product => {
         const card = createProductCard(product);
-        card.style.opacity = '0';
-        card.style.transform = 'translateY(20px)';
         productsGrid.appendChild(card);
-
-        // Stagger animation
-        setTimeout(() => {
-            card.style.transition = 'all 0.5s ease';
-            card.style.opacity = '1';
-            card.style.transform = 'translateY(0)';
-        }, index * 30);
+        displayedProducts.push(product);
     });
-
-    // Lazy load more on scroll
-    setupInfiniteScroll();
 }
 
 // ===================================
 // CREATE PRODUCT CARD
 // ===================================
+
 function createProductCard(product) {
     const card = document.createElement('div');
     card.className = 'product-card';
@@ -299,36 +193,37 @@ function createProductCard(product) {
         `الاسم بالعربي: ${product.nameAr}\n` +
         `English Name: ${product.nameEn}\n` +
         `الكود: ${product.code}\n` +
-        `الشركة: ${product.company.toUpperCase()}`
+        `الشركة: ${product.company.toUpperCase()}\n\n` +
+        `الموقع: https://aboammar.vercel.app`
     );
 
-    // Universal WhatsApp link that works on all platforms
     const whatsappLink = `https://api.whatsapp.com/send?phone=201032637495&text=${whatsappMessage}`;
 
     card.innerHTML = `
-        <div class="product-card-content">
-            <div class="product-header">
-                <span class="product-code">${escapeHtml(product.code)}</span>
-                <span class="product-company">${escapeHtml(product.company.toUpperCase())}</span>
+        <div class="product-header">
+            <div class="product-name-ar">${product.nameAr}</div>
+            <div class="product-name-en">${product.nameEn}</div>
+        </div>
+        <div class="product-details">
+            <div class="product-info">
+                <span class="info-label">الكود:</span>
+                <span class="info-value">${product.code}</span>
             </div>
-
-            <div class="product-names">
-                <h3 class="product-name-ar">${escapeHtml(product.nameAr)}</h3>
-                <p class="product-name-en">${escapeHtml(product.nameEn)}</p>
+            <div class="product-info">
+                <span class="info-label">الشركة:</span>
+                <span class="info-value">${product.company.toUpperCase()}</span>
             </div>
-
-            <div class="product-actions">
-                <a href="${whatsappLink}"
-                   target="_blank"
-                   rel="noopener noreferrer"
-                   class="whatsapp-btn"
-                   onclick="trackWhatsAppClick('${escapeHtml(product.code)}')">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 0C5.373 0 0 5.373 0 12c0 2.118.553 4.105 1.521 5.834L0 24l6.315-1.521C8.115 23.447 10.027 24 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm5.947 17.219c-.27.758-1.588 1.399-2.197 1.458-.563.055-1.086.262-3.666-.764-3.129-1.244-5.137-4.447-5.293-4.652-.152-.205-1.277-1.7-1.277-3.244 0-1.543.809-2.301 1.096-2.615.287-.314.627-.393.836-.393.209 0 .418.002.602.011.193.009.451-.073.705.537.263.627.896 2.184.975 2.342.078.158.131.342.026.547-.105.205-.158.334-.313.514-.157.18-.33.402-.471.539-.157.151-.32.314-.138.615.182.301.811 1.336 1.74 2.164 1.195 1.066 2.201 1.396 2.514 1.553.314.158.496.131.678-.078.184-.209.785-.916 1-1.23.209-.314.42-.262.705-.158.287.105 1.82.858 2.133 1.014.314.157.523.236.602.365.078.131.078.758-.191 1.516z"/>
-                    </svg>
-                    استفسر عبر واتساب
-                </a>
-            </div>
+        </div>
+        <div class="product-actions">
+            <a href="${whatsappLink}"
+               target="_blank"
+               rel="noopener noreferrer"
+               class="whatsapp-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 0C5.373 0 0 5.373 0 12c0 2.118.553 4.105 1.521 5.834L0 24l6.315-1.521C8.115 23.447 10.027 24 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm5.947 17.219c-.27.758-1.588 1.399-2.197 1.458-.563.055-1.086.262-3.666-.764-3.129-1.244-5.137-4.447-5.293-4.652-.152-.205-1.277-1.7-1.277-3.244 0-1.543.809-2.301 1.096-2.615.287-.314.627-.393.836-.393.209 0 .418.002.602.011.193.009.451-.073.705.537.263.627.896 2.184.975 2.342.078.158.131.342.026.547-.105.205-.158.334-.313.514-.157.18-.33.402-.471.539-.157.151-.32.314-.138.615.182.301.811 1.336 1.74 2.164 1.195 1.066 2.201 1.396 2.514 1.553.314.158.496.131.678-.078.184-.209.785-.916 1-1.23.209-.314.42-.262.705-.158.287.105 1.82.858 2.133 1.014.314.157.523.236.602.365.078.131.078.758-.191 1.516z"/>
+                </svg>
+                واتساب
+            </a>
         </div>
     `;
 
@@ -336,123 +231,44 @@ function createProductCard(product) {
 }
 
 // ===================================
-// INFINITE SCROLL
+// PDF DOWNLOAD FUNCTIONALITY
 // ===================================
-function setupInfiniteScroll() {
-    // Remove old observer
-    if (window.scrollObserver) {
-        window.scrollObserver.disconnect();
-    }
 
-    const lastCard = productsGrid.lastElementChild;
-    if (!lastCard) return;
-
-    window.scrollObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting && !isLoading) {
-                loadMoreProducts();
-            }
-        });
-    }, { rootMargin: '100px' });
-
-    window.scrollObserver.observe(lastCard);
-}
-
-function loadMoreProducts() {
-    const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
-
-    if (currentPage >= totalPages) return;
-
-    isLoading = true;
-    currentPage++;
-
-    const startIndex = (currentPage - 1) * productsPerPage;
-    const endIndex = startIndex + productsPerPage;
-    const newProducts = filteredProducts.slice(startIndex, endIndex);
-
-    newProducts.forEach((product, index) => {
-        const card = createProductCard(product);
-        card.style.opacity = '0';
-        card.style.transform = 'translateY(20px)';
-        productsGrid.appendChild(card);
-
-        setTimeout(() => {
-            card.style.transition = 'all 0.5s ease';
-            card.style.opacity = '1';
-            card.style.transform = 'translateY(0)';
-        }, index * 30);
-    });
-
-    isLoading = false;
-    setupInfiniteScroll();
-}
-
-// ===================================
-// UPDATE PRODUCT COUNT
-// ===================================
-function updateProductCount() {
-    const count = filteredProducts.length;
-    const text = count === 1 ? 'منتج واحد' : count === 2 ? 'منتجان' : `${count} منتج`;
-    productCount.textContent = text;
-
-    // Animate count
-    productCount.style.transform = 'scale(1.1)';
-    setTimeout(() => {
-        productCount.style.transform = 'scale(1)';
-    }, 200);
-}
-
-// ===================================
-// PDF CATALOG GENERATION
-// Using jsPDF with autotable for reliable output
-// ===================================
 async function downloadCatalogPDF() {
     try {
-        showToast('جاري إنشاء PDF... قد يستغرق دقيقة', 'info');
-
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF('p', 'mm', 'a4');
 
         // Add Arabic font support
+        let fontAdded = false;
         if (typeof addArabicFont === 'function') {
-            const fontAdded = addArabicFont(doc);
+            fontAdded = addArabicFont(doc);
             if (fontAdded) {
                 console.log('✓ Arabic font enabled for PDF');
             }
-        } else {
-            console.warn('⚠ Arabic font not available, using fallback');
         }
 
-        const pageWidth = doc.internal.pageSize.width;
-        let yPos = 20;
+        // PDF Header
+        doc.setFillColor(0, 0, 0);
+        doc.rect(0, 0, 210, 40, 'F');
 
-        // Header
-        doc.setFontSize(22);
+        // Title
+        if (fontAdded) {
+            doc.setFont('Amiri');
+        }
+        doc.setFontSize(24);
         doc.setTextColor(212, 175, 55);
-        doc.text('ABO AMMAR PERFUMES', pageWidth / 2, yPos, { align: 'center' });
-        yPos += 10;
+        doc.text('عطور أبو عمار', 105, 15, { align: 'center' });
 
-        // Contact Box
-        doc.setFillColor(212, 175, 55);
-        doc.rect(15, yPos, pageWidth - 30, 30, 'F');
+        doc.setFontSize(14);
+        doc.setTextColor(200, 200, 200);
+        doc.text('ABO AMMAR Perfumes', 105, 25, { align: 'center' });
 
-        doc.setFontSize(11);
-        doc.setTextColor(0, 0, 0);
-        yPos += 8;
-        doc.text('Contact Information', pageWidth / 2, yPos, { align: 'center' });
-        yPos += 6;
+        // Contact Info
         doc.setFontSize(10);
-        doc.text('WhatsApp: +20 103 263 7495', pageWidth / 2, yPos, { align: 'center' });
-        yPos += 5;
-        doc.text('Available 24/7 - 100% Original Products', pageWidth / 2, yPos, { align: 'center' });
-        yPos += 12;
-
-        // Date and count
-        doc.setFontSize(9);
-        doc.setTextColor(100);
-        doc.text(`Date: ${new Date().toLocaleDateString('en-US')}`, 15, yPos);
-        doc.text(`Total: ${filteredProducts.length} products`, pageWidth - 15, yPos, { align: 'right' });
-        yPos += 10;
+        doc.setTextColor(255, 255, 255);
+        doc.text('WhatsApp: +20 103 263 7495', 105, 32, { align: 'center' });
+        doc.text('https://aboammar.vercel.app', 105, 37, { align: 'center' });
 
         // Prepare table data
         const tableData = filteredProducts.map(product => [
@@ -462,195 +278,148 @@ async function downloadCatalogPDF() {
             product.nameAr
         ]);
 
-        // Create table with autotable
+        // Create table with improved styling for better readability
         doc.autoTable({
-            startY: yPos,
-            head: [['Code', 'Company', 'English Name', 'Arabic Name']],
+            startY: 45,
+            head: [['الكود', 'الشركة', 'English Name', 'الاسم بالعربي']],
             body: tableData,
-            styles: {
-                font: 'helvetica',
-                fontSize: 8,
-                cellPadding: 2,
-                lineColor: [200, 200, 200],
-                lineWidth: 0.1
-            },
             headStyles: {
                 fillColor: [212, 175, 55],
                 textColor: [0, 0, 0],
+                fontSize: 10,
                 fontStyle: 'bold',
-                fontSize: 9,
                 halign: 'center'
+            },
+            bodyStyles: {
+                textColor: [20, 20, 20],  // Darker text (almost black) for better readability
+                fontSize: 9,
+                cellPadding: 3
+            },
+            alternateRowStyles: {
+                fillColor: [245, 245, 245]
             },
             columnStyles: {
                 0: { cellWidth: 25, halign: 'center' },
                 1: { cellWidth: 25, halign: 'center' },
-                2: { cellWidth: 70, halign: 'left' },
+                2: { cellWidth: 60, halign: 'left' },
                 3: {
                     cellWidth: 60,
                     halign: 'right',
-                    font: 'Amiri',  // Use Amiri font for Arabic
-                    fontSize: 9
+                    font: fontAdded ? 'Amiri' : 'helvetica',
+                    fontSize: 9,
+                    textColor: [0, 0, 0]  // Pure black for Arabic text for maximum contrast
                 }
             },
-            alternateRowStyles: {
-                fillColor: [250, 250, 250]
-            },
-            margin: { left: 15, right: 15 },
-            didDrawPage: function(data) {
-                // Footer on each page
-                const pageNumber = doc.internal.getCurrentPageInfo().pageNumber;
-                const totalPages = doc.internal.getNumberOfPages();
-
-                doc.setFontSize(8);
-                doc.setTextColor(150);
-                doc.text(
-                    `Page ${pageNumber} of ${totalPages}`,
-                    pageWidth / 2,
-                    doc.internal.pageSize.height - 10,
-                    { align: 'center' }
-                );
-                doc.text(
-                    'ABO AMMAR PERFUMES | WhatsApp: +20 103 263 7495',
-                    pageWidth / 2,
-                    doc.internal.pageSize.height - 5,
-                    { align: 'center' }
-                );
+            margin: { top: 45, right: 15, bottom: 20, left: 15 },
+            theme: 'grid',
+            styles: {
+                lineColor: [200, 200, 200],
+                lineWidth: 0.1
             }
         });
+
+        // Footer on each page
+        const pageCount = doc.internal.getNumberOfPages();
+        for (let i = 1; i <= pageCount; i++) {
+            doc.setPage(i);
+            doc.setFontSize(9);
+            doc.setTextColor(100, 100, 100);
+            doc.text(
+                `صفحة ${i} من ${pageCount}`,
+                105,
+                doc.internal.pageSize.height - 10,
+                { align: 'center' }
+            );
+        }
 
         // Save PDF
-        const filename = `AboAmmar_Catalog_${new Date().getTime()}.pdf`;
-        doc.save(filename);
+        const date = new Date().toISOString().split('T')[0];
+        doc.save(`ABO-AMMAR-Catalog-${date}.pdf`);
 
-        showToast('تم تحميل PDF بنجاح ✓', 'success');
-        console.log(`📄 PDF Downloaded: ${filteredProducts.length} products`);
-
+        console.log('✓ PDF downloaded successfully');
     } catch (error) {
-        console.error('❌ Error generating PDF:', error);
-        showToast('حدث خطأ في إنشاء PDF', 'error');
+        console.error('Error generating PDF:', error);
+        alert('حدث خطأ أثناء إنشاء ملف PDF. يرجى المحاولة مرة أخرى.');
     }
 }
 
 // ===================================
-// UTILITY FUNCTIONS
+// SCROLL TO TOP (for mobile)
 // ===================================
-function showLoading(show) {
-    if (show) {
-        loading.style.display = 'block';
-        productsGrid.style.display = 'none';
-    } else {
-        loading.style.display = 'none';
-        productsGrid.style.display = 'grid';
-    }
-}
 
-function escapeHtml(text) {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
-}
+let scrollTopBtn = null;
 
-function showToast(message, type = 'info') {
-    // Remove existing toast
-    const existingToast = document.querySelector('.toast');
-    if (existingToast) {
-        existingToast.remove();
-    }
-
-    // Create new toast
-    const toast = document.createElement('div');
-    toast.className = 'toast';
-    toast.textContent = message;
-    document.body.appendChild(toast);
-
-    // Show toast
-    setTimeout(() => toast.classList.add('show'), 100);
-
-    // Hide toast
-    setTimeout(() => {
-        toast.classList.remove('show');
-        setTimeout(() => toast.remove(), 300);
-    }, 3000);
-}
-
-function trackWhatsAppClick(productCode) {
-    console.log(`📱 WhatsApp clicked for product: ${productCode}`);
-}
-
-// ===================================
-// INTERSECTION OBSERVER FOR ANIMATIONS
-// ===================================
-function observeElements() {
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('fade-in');
-            }
-        });
-    }, { threshold: 0.1 });
-
-    // Observe sections
-    document.querySelectorAll('section').forEach(section => {
-        observer.observe(section);
-    });
-}
-
-// ===================================
-// INITIALIZE UI ENHANCEMENTS
-// ===================================
-function initializeUI() {
-    // Add reset filters button
-    const filtersWrapper = document.querySelector('.filters-wrapper');
-    if (filtersWrapper && !document.querySelector('.reset-btn')) {
-        const resetBtn = document.createElement('button');
-        resetBtn.className = 'reset-btn';
-        resetBtn.textContent = 'إعادة تعيين';
-        resetBtn.onclick = resetFilters;
-
-        const filterStats = document.querySelector('.filter-stats');
-        if (filterStats) {
-            filterStats.appendChild(resetBtn);
+window.addEventListener('scroll', () => {
+    if (window.scrollY > 500) {
+        if (!scrollTopBtn) {
+            createScrollTopButton();
         }
+        scrollTopBtn.style.display = 'flex';
+    } else if (scrollTopBtn) {
+        scrollTopBtn.style.display = 'none';
     }
-}
+});
 
-function resetFilters() {
-    searchInput.value = '';
-    companyFilter.value = '';
-    filteredProducts = [...allProducts];
-    currentPage = 1;
-    displayProducts();
-    showToast('تم إعادة تعيين الفلاتر', 'info');
-}
+function createScrollTopButton() {
+    scrollTopBtn = document.createElement('button');
+    scrollTopBtn.innerHTML = '↑';
+    scrollTopBtn.style.cssText = `
+        position: fixed;
+        bottom: 100px;
+        left: 25px;
+        width: 50px;
+        height: 50px;
+        background: rgba(212, 175, 55, 0.9);
+        color: #000;
+        border: none;
+        border-radius: 50%;
+        font-size: 24px;
+        cursor: pointer;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 999;
+        box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+        transition: all 0.3s ease;
+    `;
 
-// ===================================
-// PERFORMANCE OPTIMIZATIONS
-// ===================================
-
-// Debounce function
-function debounce(func, wait) {
-    let timeout;
-    return function executedFunction(...args) {
-        const later = () => {
-            clearTimeout(timeout);
-            func(...args);
-        };
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
-    };
-}
-
-// Preload critical resources
-if ('loading' in HTMLImageElement.prototype) {
-    const images = document.querySelectorAll('img[loading="lazy"]');
-    images.forEach(img => {
-        img.src = img.dataset.src;
+    scrollTopBtn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     });
-} else {
-    // Fallback for browsers that don't support lazy loading
-    const script = document.createElement('script');
-    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.3.2/lazysizes.min.js';
-    document.body.appendChild(script);
+
+    scrollTopBtn.addEventListener('mouseenter', () => {
+        scrollTopBtn.style.background = '#b8941f';
+        scrollTopBtn.style.transform = 'scale(1.1)';
+    });
+
+    scrollTopBtn.addEventListener('mouseleave', () => {
+        scrollTopBtn.style.background = 'rgba(212, 175, 55, 0.9)';
+        scrollTopBtn.style.transform = 'scale(1)';
+    });
+
+    document.body.appendChild(scrollTopBtn);
 }
 
-console.log('🎨 ABO AMMAR Perfumes - Professional Edition Loaded');
+// ===================================
+// INFINITE SCROLL (Optional Enhancement)
+// ===================================
+
+let isLoadingMore = false;
+
+window.addEventListener('scroll', () => {
+    if (isLoadingMore) return;
+    if (displayedProducts.length >= filteredProducts.length) return;
+
+    const scrollPosition = window.scrollY + window.innerHeight;
+    const documentHeight = document.documentElement.scrollHeight;
+
+    if (scrollPosition >= documentHeight - 500) {
+        isLoadingMore = true;
+        setTimeout(() => {
+            displayProducts();
+            isLoadingMore = false;
+        }, 200);
+    }
+});
+
+console.log('✓ ABO AMMAR Tabbed Interface Loaded Successfully');

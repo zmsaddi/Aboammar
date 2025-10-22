@@ -251,6 +251,9 @@ function createProductCard(product) {
         `الشركة: ${product.company.toUpperCase()}`
     );
 
+    // Universal WhatsApp link that works on all platforms
+    const whatsappLink = `https://api.whatsapp.com/send?phone=201032637495&text=${whatsappMessage}`;
+
     card.innerHTML = `
         <div class="product-card-content">
             <div class="product-header">
@@ -264,8 +267,9 @@ function createProductCard(product) {
             </div>
 
             <div class="product-actions">
-                <a href="https://wa.me/201032637495?text=${whatsappMessage}"
+                <a href="${whatsappLink}"
                    target="_blank"
+                   rel="noopener noreferrer"
                    class="whatsapp-btn"
                    onclick="trackWhatsAppClick('${escapeHtml(product.code)}')">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">

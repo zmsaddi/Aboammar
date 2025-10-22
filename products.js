@@ -8627,32 +8627,32 @@ const productsData = [
   },
   {
     "code": "1728762",
-    "company": "وورم كوست",
-    "nameAr": "اصدارات خاصة",
+    "company": "اصدارات خاصة",
+    "nameAr": "وورم كوست",
     "nameEn": "WARM COAST"
   },
   {
     "code": "1728763",
-    "company": "ديب تشارم",
-    "nameAr": "اصدارات خاصة",
+    "company": "اصدارات خاصة",
+    "nameAr": "ديب تشارم",
     "nameEn": "DEEP CHARM"
   },
   {
     "code": "1728761",
-    "company": "مسكي ترايل",
-    "nameAr": "اصدارات خاصة",
+    "company": "اصدارات خاصة",
+    "nameAr": "مسكي ترايل",
     "nameEn": "MUSKY TRAIL"
   },
   {
     "code": "1649590",
-    "company": "هايبنوتيك نايت",
-    "nameAr": "اصدارات خاصة",
+    "company": "اصدارات خاصة",
+    "nameAr": "هايبنوتيك نايت",
     "nameEn": "HYPNOTIC NIGHT"
   },
   {
     "code": "1664364",
-    "company": "سويت اديكشن",
-    "nameAr": "اصدارات خاصة",
+    "company": "اصدارات خاصة",
+    "nameAr": "سويت اديكشن",
     "nameEn": "SWEET ADDICTION"
   },
   {

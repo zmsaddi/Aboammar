@@ -403,70 +403,116 @@ function updateProductCount() {
 }
 
 // ===================================
-// CATALOG DOWNLOAD - CSV WITH PERFECT ARABIC
+// PDF CATALOG GENERATION
+// Using jsPDF with autotable for reliable output
 // ===================================
 async function downloadCatalogPDF() {
     try {
-        showToast('جاري إنشاء الكتالوج...', 'info');
+        showToast('جاري إنشاء PDF... قد يستغرق دقيقة', 'info');
 
-        // Create CSV content with UTF-8 BOM for perfect Arabic in Excel
-        let csvContent = '\uFEFF'; // UTF-8 BOM
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF('p', 'mm', 'a4');
 
-        // Professional Header
-        csvContent += '=======================================================\n';
-        csvContent += 'عطور أبو عمار - ABO AMMAR PERFUMES\n';
-        csvContent += '=======================================================\n';
-        csvContent += 'كتالوج المنتجات - Product Catalog\n\n';
+        const pageWidth = doc.internal.pageSize.width;
+        let yPos = 20;
 
-        // Contact Information
-        csvContent += '--- معلومات التواصل / Contact Information ---\n';
-        csvContent += 'WhatsApp / واتساب: +20 103 263 7495\n';
-        csvContent += 'Available 24/7 - متاح على مدار الساعة\n';
-        csvContent += '100% Original Products - جميع المنتجات أصلية 100%\n\n';
+        // Header
+        doc.setFontSize(22);
+        doc.setTextColor(212, 175, 55);
+        doc.text('ABO AMMAR PERFUMES', pageWidth / 2, yPos, { align: 'center' });
+        yPos += 10;
 
-        // Date and Count
-        const today = new Date().toLocaleDateString('ar-EG');
-        csvContent += `التاريخ / Date: ${today}\n`;
-        csvContent += `عدد المنتجات / Total Products: ${filteredProducts.length}\n`;
-        csvContent += '=======================================================\n\n';
+        // Contact Box
+        doc.setFillColor(212, 175, 55);
+        doc.rect(15, yPos, pageWidth - 30, 30, 'F');
 
-        // Table Headers
-        csvContent += 'الكود,الشركة,الاسم بالعربي,English Name\n';
+        doc.setFontSize(11);
+        doc.setTextColor(0, 0, 0);
+        yPos += 8;
+        doc.text('Contact Information', pageWidth / 2, yPos, { align: 'center' });
+        yPos += 6;
+        doc.setFontSize(10);
+        doc.text('WhatsApp: +20 103 263 7495', pageWidth / 2, yPos, { align: 'center' });
+        yPos += 5;
+        doc.text('Available 24/7 - 100% Original Products', pageWidth / 2, yPos, { align: 'center' });
+        yPos += 12;
 
-        // Add all products
-        filteredProducts.forEach(product => {
-            const code = `"${product.code}"`;
-            const company = `"${product.company.toUpperCase()}"`;
-            const nameAr = `"${product.nameAr.replace(/"/g, '""')}"`;
-            const nameEn = `"${product.nameEn.replace(/"/g, '""')}"`;
-            csvContent += `${code},${company},${nameAr},${nameEn}\n`;
+        // Date and count
+        doc.setFontSize(9);
+        doc.setTextColor(100);
+        doc.text(`Date: ${new Date().toLocaleDateString('en-US')}`, 15, yPos);
+        doc.text(`Total: ${filteredProducts.length} products`, pageWidth - 15, yPos, { align: 'right' });
+        yPos += 10;
+
+        // Prepare table data
+        const tableData = filteredProducts.map(product => [
+            product.code,
+            product.company.toUpperCase(),
+            product.nameEn,
+            product.nameAr
+        ]);
+
+        // Create table with autotable
+        doc.autoTable({
+            startY: yPos,
+            head: [['Code', 'Company', 'English Name', 'Arabic Name']],
+            body: tableData,
+            styles: {
+                font: 'helvetica',
+                fontSize: 8,
+                cellPadding: 2,
+                lineColor: [200, 200, 200],
+                lineWidth: 0.1
+            },
+            headStyles: {
+                fillColor: [212, 175, 55],
+                textColor: [0, 0, 0],
+                fontStyle: 'bold',
+                fontSize: 9,
+                halign: 'center'
+            },
+            columnStyles: {
+                0: { cellWidth: 25, halign: 'center' },
+                1: { cellWidth: 25, halign: 'center' },
+                2: { cellWidth: 70, halign: 'left' },
+                3: { cellWidth: 60, halign: 'right' }
+            },
+            alternateRowStyles: {
+                fillColor: [250, 250, 250]
+            },
+            margin: { left: 15, right: 15 },
+            didDrawPage: function(data) {
+                // Footer on each page
+                const pageNumber = doc.internal.getCurrentPageInfo().pageNumber;
+                const totalPages = doc.internal.getNumberOfPages();
+
+                doc.setFontSize(8);
+                doc.setTextColor(150);
+                doc.text(
+                    `Page ${pageNumber} of ${totalPages}`,
+                    pageWidth / 2,
+                    doc.internal.pageSize.height - 10,
+                    { align: 'center' }
+                );
+                doc.text(
+                    'ABO AMMAR PERFUMES | WhatsApp: +20 103 263 7495',
+                    pageWidth / 2,
+                    doc.internal.pageSize.height - 5,
+                    { align: 'center' }
+                );
+            }
         });
 
-        // Footer
-        csvContent += '\n=======================================================\n';
-        csvContent += 'ABO AMMAR PERFUMES - عطور أبو عمار\n';
-        csvContent += 'WhatsApp: +20 103 263 7495\n';
-        csvContent += '=======================================================\n';
+        // Save PDF
+        const filename = `AboAmmar_Catalog_${new Date().getTime()}.pdf`;
+        doc.save(filename);
 
-        // Create and download CSV file
-        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-        const link = document.createElement('a');
-        const url = URL.createObjectURL(blob);
-
-        link.setAttribute('href', url);
-        link.setAttribute('download', `AboAmmar_Catalog_${new Date().getTime()}.csv`);
-        link.style.visibility = 'hidden';
-
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-
-        showToast('تم تحميل الكتالوج بنجاح ✓ (Excel/CSV)', 'success');
-        console.log(`📄 CSV Downloaded: ${filteredProducts.length} products with perfect Arabic`);
+        showToast('تم تحميل PDF بنجاح ✓', 'success');
+        console.log(`📄 PDF Downloaded: ${filteredProducts.length} products`);
 
     } catch (error) {
-        console.error('❌ Error generating catalog:', error);
-        showToast('حدث خطأ في إنشاء الكتالوج', 'error');
+        console.error('❌ Error generating PDF:', error);
+        showToast('حدث خطأ في إنشاء PDF', 'error');
     }
 }
 

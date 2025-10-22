@@ -288,7 +288,7 @@ async function downloadCatalogPDF() {
             product.nameAr
         ]);
 
-        // Create table with FULL Arabic support for all columns
+        // Create table with FULL Arabic support for all columns - CENTERED & LARGER FONTS
         doc.autoTable({
             startY: 45,
             head: [['الكود', 'الشركة', 'English Name', 'الاسم بالعربي']],
@@ -296,15 +296,18 @@ async function downloadCatalogPDF() {
             headStyles: {
                 fillColor: [212, 175, 55],
                 textColor: [0, 0, 0],
-                fontSize: 10,
+                fontSize: 12,  // Larger header font
                 fontStyle: 'bold',
                 halign: 'center',
+                valign: 'middle',
                 font: fontAdded ? 'Amiri' : 'helvetica'  // Arabic font for headers
             },
             bodyStyles: {
                 textColor: [0, 0, 0],  // Pure black for all text
-                fontSize: 9,
-                cellPadding: 3,
+                fontSize: 11,  // Increased from 9 to 11
+                cellPadding: 4,  // More padding for better spacing
+                valign: 'middle',
+                halign: 'center',  // CENTER all text by default
                 font: fontAdded ? 'Amiri' : 'helvetica'  // Arabic font for all body text
             },
             alternateRowStyles: {
@@ -314,25 +317,32 @@ async function downloadCatalogPDF() {
                 0: {
                     cellWidth: 25,
                     halign: 'center',
-                    textColor: [0, 0, 0]
+                    valign: 'middle',
+                    textColor: [0, 0, 0],
+                    fontSize: 11
                 },
                 1: {
                     cellWidth: 25,
-                    halign: 'center',
-                    font: fontAdded ? 'Amiri' : 'helvetica',  // Arabic font for company names
-                    textColor: [0, 0, 0]
+                    halign: 'center',  // CENTER alignment for company names
+                    valign: 'middle',
+                    font: fontAdded ? 'Amiri' : 'helvetica',
+                    textColor: [0, 0, 0],
+                    fontSize: 11
                 },
                 2: {
                     cellWidth: 60,
-                    halign: 'center',
-                    font: fontAdded ? 'Amiri' : 'helvetica',  // Arabic font for English names (may contain Arabic)
-                    textColor: [0, 0, 0]
+                    halign: 'center',  // CENTER alignment for English names
+                    valign: 'middle',
+                    font: fontAdded ? 'Amiri' : 'helvetica',
+                    textColor: [0, 0, 0],
+                    fontSize: 11
                 },
                 3: {
                     cellWidth: 60,
-                    halign: 'right',
-                    font: fontAdded ? 'Amiri' : 'helvetica',  // Arabic font for Arabic names
-                    fontSize: 9,
+                    halign: 'center',  // CENTER alignment for Arabic names (was 'right')
+                    valign: 'middle',
+                    font: fontAdded ? 'Amiri' : 'helvetica',
+                    fontSize: 12,  // Even larger font for Arabic names
                     textColor: [0, 0, 0]
                 }
             },
@@ -341,7 +351,8 @@ async function downloadCatalogPDF() {
             styles: {
                 lineColor: [200, 200, 200],
                 lineWidth: 0.1,
-                font: fontAdded ? 'Amiri' : 'helvetica'  // Default Arabic font
+                font: fontAdded ? 'Amiri' : 'helvetica',  // Default Arabic font
+                minCellHeight: 10  // Minimum row height for better spacing
             }
         });
 

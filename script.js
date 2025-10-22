@@ -181,14 +181,16 @@ function displayProducts() {
 }
 
 // ===================================
-// UNIVERSAL WHATSAPP LINK HELPER
+// UNIVERSAL WHATSAPP LINK - WORKS ON ALL PLATFORMS & APPS
 // ===================================
 
 function getUniversalWhatsAppLink(phone, message) {
-    // Use wa.me for universal compatibility (works on all platforms)
-    // This works with: WhatsApp Personal, WhatsApp Business, Desktop, Web
     const encodedMessage = encodeURIComponent(message);
-    return `https://wa.me/${phone}?text=${encodedMessage}`;
+
+    // Use whatsapp:// protocol - opens whatever WhatsApp app is default
+    // Falls back to wa.me if no app installed
+    // This respects user's choice of default WhatsApp app
+    return `whatsapp://send?phone=${phone}&text=${encodedMessage}`;
 }
 
 // ===================================
@@ -288,7 +290,7 @@ async function downloadCatalogPDF() {
             product.nameAr
         ]);
 
-        // Create table with FULL Arabic support for all columns - CENTERED & LARGER FONTS
+        // Create table with FULL Arabic support - CENTERED & EXTRA LARGE FONTS
         doc.autoTable({
             startY: 45,
             head: [['الكود', 'الشركة', 'English Name', 'الاسم بالعربي']],
@@ -296,22 +298,22 @@ async function downloadCatalogPDF() {
             headStyles: {
                 fillColor: [212, 175, 55],
                 textColor: [0, 0, 0],
-                fontSize: 12,  // Larger header font
+                fontSize: 14,  // EXTRA LARGE header font (was 12)
                 fontStyle: 'bold',
                 halign: 'center',
                 valign: 'middle',
-                font: fontAdded ? 'Amiri' : 'helvetica'  // Arabic font for headers
+                font: fontAdded ? 'Amiri' : 'helvetica'
             },
             bodyStyles: {
-                textColor: [0, 0, 0],  // Pure black for all text
-                fontSize: 11,  // Increased from 9 to 11
-                cellPadding: 4,  // More padding for better spacing
+                textColor: [0, 0, 0],  // Pure black
+                fontSize: 13,  // LARGER body font (was 11)
+                cellPadding: 5,  // More padding
                 valign: 'middle',
-                halign: 'center',  // CENTER all text by default
-                font: fontAdded ? 'Amiri' : 'helvetica'  // Arabic font for all body text
+                halign: 'center',  // CENTER all text
+                font: fontAdded ? 'Amiri' : 'helvetica'
             },
             alternateRowStyles: {
-                fillColor: [245, 245, 245]
+                fillColor: [248, 248, 248]  // Lighter alternate rows
             },
             columnStyles: {
                 0: {
@@ -319,31 +321,32 @@ async function downloadCatalogPDF() {
                     halign: 'center',
                     valign: 'middle',
                     textColor: [0, 0, 0],
-                    fontSize: 11
+                    fontSize: 13
                 },
                 1: {
                     cellWidth: 25,
-                    halign: 'center',  // CENTER alignment for company names
+                    halign: 'center',
                     valign: 'middle',
                     font: fontAdded ? 'Amiri' : 'helvetica',
                     textColor: [0, 0, 0],
-                    fontSize: 11
+                    fontSize: 13
                 },
                 2: {
                     cellWidth: 60,
-                    halign: 'center',  // CENTER alignment for English names
+                    halign: 'center',
                     valign: 'middle',
                     font: fontAdded ? 'Amiri' : 'helvetica',
                     textColor: [0, 0, 0],
-                    fontSize: 11
+                    fontSize: 13
                 },
                 3: {
                     cellWidth: 60,
-                    halign: 'center',  // CENTER alignment for Arabic names (was 'right')
+                    halign: 'center',  // CENTERED Arabic text
                     valign: 'middle',
                     font: fontAdded ? 'Amiri' : 'helvetica',
-                    fontSize: 12,  // Even larger font for Arabic names
-                    textColor: [0, 0, 0]
+                    fontSize: 14,  // LARGEST font for Arabic (was 12)
+                    textColor: [0, 0, 0],
+                    fontStyle: 'bold'  // Bold Arabic text for emphasis
                 }
             },
             margin: { top: 45, right: 15, bottom: 20, left: 15 },

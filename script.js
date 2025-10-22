@@ -303,12 +303,12 @@ async function downloadCatalogPDF() {
         doc.setTextColor(255, 255, 255);
         doc.text('WhatsApp', 177.5, 18.5, { align: 'center' });
 
-        // Make button clickable - wa.me universal link (works in ALL PDF viewers)
-        // CRITICAL: PDF links ONLY work with http:// or https:// protocols!
-        // Custom protocols like whatsapp:// are NOT recognized/clickable in PDFs
-        // wa.me is WhatsApp's official universal link - opens app on mobile, web on desktop
+        // Make button clickable - web.whatsapp.com DIRECT link (NO intermediate screen)
+        // ISSUE FOUND: wa.me on desktop shows "Do you have WhatsApp Desktop?" screen (bad UX)
+        // SOLUTION: web.whatsapp.com/send goes DIRECTLY to WhatsApp Web (no popups)
+        // WORKS ON: Mobile (redirects to app), Desktop (opens web directly), All PDF viewers
         doc.link(155, 10, 45, 14, {
-            url: 'https://wa.me/201032637495?text=' + encodeURIComponent('مرحباً، أود الاستفسار عن منتجاتكم')
+            url: 'https://web.whatsapp.com/send?phone=201032637495&text=' + encodeURIComponent('مرحباً، أود الاستفسار عن منتجاتكم')
         });
 
         // Prepare table data

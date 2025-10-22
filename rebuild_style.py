@@ -1,4 +1,7 @@
-﻿/* ===================================
+import sys
+sys.stdout.reconfigure(encoding='utf-8')
+
+css_content = '''/* ===================================
    ABO AMMAR PERFUMES - PROFESSIONAL DESIGN
    Modern, Elegant, User-Friendly
    =================================== */
@@ -1045,3 +1048,9 @@ body {
         display: none;
     }
 }
+'''
+
+with open('style.css', 'w', encoding='utf-8-sig') as f:
+    f.write(css_content)
+
+print('Professional CSS created successfully')

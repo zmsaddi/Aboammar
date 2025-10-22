@@ -1,4 +1,7 @@
-﻿// ===================================
+import sys
+sys.stdout.reconfigure(encoding='utf-8')
+
+js_content = '''// ===================================
 // ABO AMMAR PERFUMES - PROFESSIONAL UX
 // Modern, Fast, User-Friendly
 // ===================================
@@ -245,9 +248,9 @@ function createProductCard(product) {
     card.className = 'product-card';
 
     const whatsappMessage = encodeURIComponent(
-        `مرحباً، أنا مهتم بالمنتج:\n` +
-        `الاسم: ${product.nameAr}\n` +
-        `الكود: ${product.code}\n` +
+        `مرحباً، أنا مهتم بالمنتج:\\n` +
+        `الاسم: ${product.nameAr}\\n` +
+        `الكود: ${product.code}\\n` +
         `الشركة: ${product.company.toUpperCase()}`
     );
 
@@ -565,3 +568,9 @@ if ('loading' in HTMLImageElement.prototype) {
 }
 
 console.log('🎨 ABO AMMAR Perfumes - Professional Edition Loaded');
+'''
+
+with open('script.js', 'w', encoding='utf-8-sig') as f:
+    f.write(js_content)
+
+print('Professional JavaScript created successfully')

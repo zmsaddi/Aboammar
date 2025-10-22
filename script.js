@@ -398,6 +398,27 @@ async function downloadCatalogPDF() {
                 doc.setFont('Amiri');
             }
 
+            // WhatsApp Button on pages 2+ (top right corner, below header)
+            if (i > 1) {
+                // WhatsApp button background (WhatsApp green)
+                doc.setFillColor(37, 211, 102);
+                doc.roundedRect(162, 26, 40, 12, 3, 3, 'F');
+
+                // WhatsApp icon + text (white, bold)
+                doc.setFontSize(12);
+                doc.setTextColor(255, 255, 255);
+                doc.setFont('helvetica', 'bold');
+                doc.text('📱 WhatsApp', 182, 33.5, { align: 'center' });
+
+                // Make button clickable - opens WhatsApp with inquiry message
+                doc.link(162, 26, 40, 12, { url: 'https://wa.me/201032637495?text=' + encodeURIComponent('مرحباً، أود الاستفسار عن منتجاتكم') });
+
+                // Reset font to Arabic
+                if (fontAdded) {
+                    doc.setFont('Amiri');
+                }
+            }
+
             // WhatsApp contact in footer
             doc.setFontSize(10);
             doc.setTextColor(0, 0, 0);

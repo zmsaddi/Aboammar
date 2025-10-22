@@ -246,7 +246,8 @@ function createProductCard(product) {
 
     const whatsappMessage = encodeURIComponent(
         `مرحباً، أنا مهتم بالمنتج:\n` +
-        `الاسم: ${product.nameAr}\n` +
+        `الاسم بالعربي: ${product.nameAr}\n` +
+        `English Name: ${product.nameEn}\n` +
         `الكود: ${product.code}\n` +
         `الشركة: ${product.company.toUpperCase()}`
     );

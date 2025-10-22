@@ -296,11 +296,17 @@ async function downloadCatalogPDF() {
         // WhatsApp Button on FIRST PAGE ONLY (top right)
         doc.setFillColor(37, 211, 102); // WhatsApp green
         doc.roundedRect(155, 10, 45, 14, 3, 3, 'F');
-        doc.setFontSize(13);
-        doc.setTextColor(255, 255, 255);
+
+        // Button text - clean English
         doc.setFont('helvetica', 'bold');
-        doc.text('📱 WhatsApp', 177.5, 18.5, { align: 'center' });
-        doc.link(155, 10, 45, 14, { url: 'https://wa.me/201032637495?text=' + encodeURIComponent('مرحباً، أود الاستفسار عن منتجاتكم') });
+        doc.setFontSize(14);
+        doc.setTextColor(255, 255, 255);
+        doc.text('WhatsApp', 177.5, 18.5, { align: 'center' });
+
+        // Make button clickable - opens WhatsApp
+        doc.link(155, 10, 45, 14, {
+            url: 'https://wa.me/201032637495?text=' + encodeURIComponent('مرحباً، أود الاستفسار عن منتجاتكم')
+        });
 
         // Prepare table data
         const tableData = filteredProducts.map(product => [

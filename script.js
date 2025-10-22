@@ -259,26 +259,38 @@ async function downloadCatalogPDF() {
             }
         }
 
-        // PDF Header - COMPACT for 30 products per page
+        // FIRST PAGE: Large header with logo and company info
         doc.setFillColor(0, 0, 0);
-        doc.rect(0, 0, 210, 28, 'F');
+        doc.rect(0, 0, 210, 55, 'F');
+
+        // Add logo (if available)
+        try {
+            const logoImg = document.querySelector('.logo-img');
+            if (logoImg && logoImg.complete) {
+                doc.addImage(logoImg, 'JPEG', 15, 8, 40, 40);
+            }
+        } catch (e) {
+            console.log('Logo not added to PDF');
+        }
 
         // Title
         if (fontAdded) {
             doc.setFont('Amiri');
         }
-        doc.setFontSize(18);
+        doc.setFontSize(28);
         doc.setTextColor(212, 175, 55);
-        doc.text('عطور أبو عمار', 105, 10, { align: 'center' });
+        doc.text('عطور أبو عمار', 105, 20, { align: 'center' });
 
-        doc.setFontSize(11);
+        doc.setFontSize(18);
         doc.setTextColor(200, 200, 200);
-        doc.text('ABO AMMAR Perfumes', 105, 17, { align: 'center' });
+        doc.text('ABO AMMAR Perfumes', 105, 32, { align: 'center' });
 
-        // Contact Info
-        doc.setFontSize(8);
+        // Contact Info - LARGER and MORE READABLE
+        doc.setFontSize(12);
         doc.setTextColor(255, 255, 255);
-        doc.text('WhatsApp: +20 103 263 7495 | https://aboammar.vercel.app', 105, 24, { align: 'center' });
+        doc.text('WhatsApp: +20 103 263 7495', 105, 43, { align: 'center' });
+        doc.setFontSize(11);
+        doc.text('https://aboammar.vercel.app', 105, 51, { align: 'center' });
 
         // Prepare table data
         const tableData = filteredProducts.map(product => [
@@ -288,25 +300,25 @@ async function downloadCatalogPDF() {
             product.nameAr
         ]);
 
-        // Create table - OPTIMIZED for 30 products per A4 page
+        // Create table - CENTERED ON PAGE with ~30 products per page
         doc.autoTable({
-            startY: 32,
+            startY: 60,
             head: [['الكود', 'الشركة', 'English Name', 'الاسم بالعربي']],
             body: tableData,
             headStyles: {
                 fillColor: [212, 175, 55],
                 textColor: [0, 0, 0],
-                fontSize: 10,
+                fontSize: 11,
                 fontStyle: 'bold',
                 halign: 'center',
                 valign: 'middle',
-                cellPadding: 2,
+                cellPadding: 3,
                 font: fontAdded ? 'Amiri' : 'helvetica'
             },
             bodyStyles: {
                 textColor: [0, 0, 0],
-                fontSize: 9,
-                cellPadding: 2,
+                fontSize: 10,
+                cellPadding: 2.5,
                 valign: 'middle',
                 halign: 'center',
                 font: fontAdded ? 'Amiri' : 'helvetica'
@@ -316,55 +328,82 @@ async function downloadCatalogPDF() {
             },
             columnStyles: {
                 0: {
-                    cellWidth: 28,
+                    cellWidth: 30,
                     halign: 'center',
                     valign: 'middle',
                     textColor: [0, 0, 0],
-                    fontSize: 9
+                    fontSize: 10
                 },
                 1: {
-                    cellWidth: 20,
+                    cellWidth: 25,
                     halign: 'center',
                     valign: 'middle',
                     font: fontAdded ? 'Amiri' : 'helvetica',
                     textColor: [0, 0, 0],
-                    fontSize: 9
+                    fontSize: 10
                 },
                 2: {
-                    cellWidth: 65,
+                    cellWidth: 60,
                     halign: 'center',
                     valign: 'middle',
                     font: fontAdded ? 'Amiri' : 'helvetica',
                     textColor: [0, 0, 0],
-                    fontSize: 9
+                    fontSize: 10
                 },
                 3: {
-                    cellWidth: 65,
+                    cellWidth: 60,
                     halign: 'center',
                     valign: 'middle',
                     font: fontAdded ? 'Amiri' : 'helvetica',
-                    fontSize: 10,
+                    fontSize: 11,
                     textColor: [0, 0, 0],
                     fontStyle: 'bold'
                 }
             },
-            margin: { top: 32, right: 10, bottom: 15, left: 10 },
+            // CENTERED: Total width = 30+25+60+60 = 175mm, so margins = (210-175)/2 = 17.5mm
+            margin: { top: 60, right: 17.5, bottom: 20, left: 17.5 },
             theme: 'grid',
             styles: {
                 lineColor: [200, 200, 200],
                 lineWidth: 0.1,
                 font: fontAdded ? 'Amiri' : 'helvetica',
-                minCellHeight: 7
+                minCellHeight: 7.5
+            },
+            // Add compact header on pages 2+
+            didDrawPage: function(data) {
+                if (data.pageNumber > 1) {
+                    // Compact header for subsequent pages
+                    doc.setFillColor(0, 0, 0);
+                    doc.rect(0, 0, 210, 22, 'F');
+
+                    if (fontAdded) {
+                        doc.setFont('Amiri');
+                    }
+                    doc.setFontSize(16);
+                    doc.setTextColor(212, 175, 55);
+                    doc.text('عطور أبو عمار', 105, 9, { align: 'center' });
+
+                    doc.setFontSize(10);
+                    doc.setTextColor(200, 200, 200);
+                    doc.text('ABO AMMAR Perfumes', 105, 16, { align: 'center' });
+                }
             }
         });
 
-        // Footer on each page with Arabic font support
+        // Footer on each page with WhatsApp contact and page number
         const pageCount = doc.internal.getNumberOfPages();
         for (let i = 1; i <= pageCount; i++) {
             doc.setPage(i);
             if (fontAdded) {
                 doc.setFont('Amiri');
             }
+
+            // WhatsApp contact in footer
+            doc.setFontSize(10);
+            doc.setTextColor(0, 0, 0);
+            doc.text('WhatsApp: +20 103 263 7495', 20, doc.internal.pageSize.height - 10);
+
+            // Page number
             doc.setFontSize(9);
             doc.setTextColor(100, 100, 100);
             doc.text(
@@ -373,6 +412,11 @@ async function downloadCatalogPDF() {
                 doc.internal.pageSize.height - 10,
                 { align: 'center' }
             );
+
+            // Website URL
+            doc.setFontSize(9);
+            doc.setTextColor(0, 0, 0);
+            doc.text('aboammar.vercel.app', 190, doc.internal.pageSize.height - 10, { align: 'right' });
         }
 
         // Save PDF
